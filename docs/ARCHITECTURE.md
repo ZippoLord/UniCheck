@@ -1,50 +1,50 @@
-# UniCheck Architecture Documentation
+# UniCheck Architektúra Dokumentáció
 
-This document describes the architecture, design patterns, and technical decisions behind the UniCheck mobile application.
+Ez a dokumentum leírja az UniCheck mobilalkalmazás architektúráját, tervezési mintáit és technikai döntéseit.
 
-## System Overview
+## Rendszer Áttekintés
 
-UniCheck is a Flutter-based cross-platform mobile application for university attendance management using NFC technology. The application follows clean architecture principles with clear separation of concerns.
+A UniCheck egy Flutter-alapú többplatformos mobilalkalmazás egyetemi jelenléti nyilvántartás kezelésére NFC technológia használatával. Az alkalmazás tiszta architektúra elveket követ egyértelmű feladatok szétválasztásával.
 
-## Technology Stack
+## Technológiai Stack
 
-### Frontend (Mobile App)
+### Frontend (Mobilalkalmazás)
 - **Framework:** Flutter 3.9.2+
-- **Language:** Dart
-- **State Management:** GetX
-- **Storage:** GetStorage
-- **HTTP Client:** http package
-- **Animations:** Lottie
+- **Nyelv:** Dart
+- **Állapotkezelés:** GetX
+- **Tárolás:** GetStorage
+- **HTTP Kliens:** http csomag
+- **Animációk:** Lottie
 
-### Backend Integration
-- **Authentication:** JWT (JSON Web Tokens)
-- **API Communication:** REST
-- **Data Format:** JSON
+### Backend Integráció
+- **Hitelesítés:** JWT (JSON Web Tokens)
+- **API Kommunikáció:** REST
+- **Adat Formátum:** JSON
 
-### Native Integration
+### Natív Integráció
 - **Platform:** Android (Kotlin)
 - **NFC:** Host Card Emulation (HCE)
-- **Communication:** Platform Channels
+- **Kommunikáció:** Platform Csatornák
 
-## Architecture Patterns
+## Architektúra Minták
 
-### 1. Clean Architecture
+### 1. Tiszta Architektúra
 
-The application follows clean architecture principles with clear layer separation:
+Az alkalmazás tiszta architektúra elveket követ egyértelmű réteg szétválasztással:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  Presentation Layer                      │
+│                  Prezentációs Réteg                      │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Screens    │  │   Widgets    │  │  Components  │  │
-│  │  (UI/Pages)  │  │   (Custom)   │  │  (Reusable)  │  │
+│  │  Képernyők   │  │   Widgetek   │  │  Komponensek │  │
+│  │  (UI/Pages)  │  │   (Egyedi)   │  │(Újrahaszn.)  │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └────────────────────────┬────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│                   Business Logic Layer                   │
+│                 Üzleti Logika Réteg                      │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │            Controllers (GetX)                     │  │
+│  │            Kontrollerek (GetX)                    │  │
 │  │  - LoginController                                │  │
 │  │  - RegisterController                             │  │
 │  │  - PasswordController                             │  │
@@ -52,44 +52,44 @@ The application follows clean architecture principles with clear layer separatio
 └────────────────────────┬────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│                      Data Layer                          │
+│                      Adat Réteg                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │    Models    │  │  API Client  │  │   Storage    │  │
-│  │   (DTOs)     │  │    (HTTP)    │  │ (GetStorage) │  │
+│  │   Modellek   │  │  API Kliens  │  │   Tárolás    │  │
+│  │   (DTOk)     │  │    (HTTP)    │  │ (GetStorage) │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └─────────────────────────────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│              Platform-Specific Layer                     │
+│             Platform-Specifikus Réteg                    │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │        Android Native (Kotlin)                    │  │
+│  │        Android Natív (Kotlin)                     │  │
 │  │  - MainActivity (Method Channel Handler)          │  │
-│  │  - HCE Service (NFC Emulation)                    │  │
+│  │  - HCE Service (NFC Emuláció)                     │  │
 │  └──────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 2. State Management (GetX)
+### 2. Állapotkezelés (GetX)
 
-UniCheck uses GetX for reactive state management, providing:
-- **Dependency Injection:** Simple controller instantiation
-- **Reactive Programming:** Automatic UI updates
-- **Route Management:** Simple navigation
-- **State Persistence:** Local storage integration
+A UniCheck GetX-et használ reaktív állapotkezeléshez, amely biztosítja:
+- **Dependency Injection:** Egyszerű kontroller példányosítás
+- **Reaktív Programozás:** Automatikus UI frissítések
+- **Útvonal Kezelés:** Egyszerű navigáció
+- **Állapot Perzisztencia:** Helyi tárolás integráció
 
-**Controller Pattern:**
+**Kontroller Minta:**
 
 ```dart
 class LoginController extends GetxController {
-  // Observable state
+  // Megfigyelhető állapot
   RxBool _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
   
-  // Business logic
+  // Üzleti logika
   void loginFunction(String data) async {
     _isLoading.value = true;
     try {
-      // API call and processing
+      // API hívás és feldolgozás
     } finally {
       _isLoading.value = false;
     }
@@ -97,16 +97,16 @@ class LoginController extends GetxController {
 }
 ```
 
-### 3. Repository Pattern
+### 3. Repository Minta
 
-API communication follows the repository pattern (implicitly):
+Az API kommunikáció követi a repository mintát (implicit módon):
 
 ```
-Controller → HTTP Client → API Endpoint
+Kontroller → HTTP Kliens → API Végpont
      ↓
    Model (DTO)
      ↓
-   Storage (Cache)
+   Tárolás (Cache)
 ```
 
 ## Project Structure
