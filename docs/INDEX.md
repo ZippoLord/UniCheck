@@ -157,12 +157,13 @@
 | ARCHITECTURE.md | 649 | ~15 KB | Architektúra, Design Patterns |
 | CONTRIBUTING.md | 621 | ~13 KB | Közreműködés, Konvenciók |
 | NFC_IMPLEMENTATION.md | 715 | ~23 KB | NFC HCE, Platform Natív |
-| **Összesen** | **3,853** | **~115 KB** | **Teljes körű dokumentáció** |
+| INDEX.md | 319 | ~9 KB | Navigáció, Áttekintés |
+| **Összesen** | **4,172** | **~124 KB** | **Teljes körű dokumentáció** |
 
 ## 🔄 Dokumentáció Verzió
 
 - **Verzió:** 1.0.0
-- **Utolsó Frissítés:** 2024-01-15
+- **Utolsó Frissítés:** 2025-01-15
 - **Nyelv:** Magyar 🇭🇺
 - **Készítette:** UniCheck Fejlesztői Csapat
 
@@ -244,7 +245,7 @@ Ha a dokumentációban nem találod a választ:
 
 1. **GitHub Issues** - [Nyiss issue-t](https://github.com/ZippoLord/UniCheck/issues)
 2. **GitHub Discussions** - [Kezdj beszélgetést](https://github.com/ZippoLord/UniCheck/discussions)
-3. **Email** - dev@unichez.edu
+3. **Email** - dev@unichez.edu *(példa email - frissítendő valós elérhetőséggel)*
 
 ## 🔗 Hasznos Külső Linkek
 

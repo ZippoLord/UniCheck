@@ -887,5 +887,5 @@ Az API verziózást használ a visszafelé kompatibilitás biztosítására:
 ---
 
 **API Verzió:** 1.0  
-**Utolsó Frissítés:** 2024-01-15  
-**Support:** api-support@unichez.edu
+**Utolsó Frissítés:** 2025-01-15  
+**Support:** api-support@unichez.edu *(példa email - frissítendő)*

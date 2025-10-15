@@ -646,4 +646,4 @@ A UniCheck alkalmazás egy jól strukturált, skálázható Flutter alkalmazás,
 ---
 
 **Verzió:** 1.0.0  
-**Utolsó Frissítés:** 2024-01-15
+**Utolsó Frissítés:** 2025-01-15
