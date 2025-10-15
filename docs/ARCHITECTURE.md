@@ -109,46 +109,46 @@ Kontroller → HTTP Kliens → API Végpont
    Tárolás (Cache)
 ```
 
-## Project Structure
+## Projekt Struktúra
 
-### Directory Organization
+### Könyvtár Szervezés
 
 ```
 lib/
-├── main.dart                    # Application entry point
-├── constants.dart               # Global constants (API URLs)
-├── login_or_register.dart       # Auth switcher page
+├── main.dart                    # Alkalmazás belépési pont
+├── constants.dart               # Globális konstansok (API URL-ek)
+├── login_or_register.dart       # Auth váltó oldal
 │
-├── controllers/                 # Business logic (GetX)
+├── controllers/                 # Üzleti logika (GetX)
 │   ├── login_controller.dart
 │   ├── register_controller.dart
 │   └── password_controller.dart
 │
-├── models/                      # Data models (DTOs)
+├── models/                      # Adat modellek (DTOk)
 │   ├── login_model.dart
 │   ├── login_response.dart
 │   ├── register_model.dart
 │   ├── register_response_model.dart
 │   └── api_error.dart
 │
-├── components/                  # Form components
+├── components/                  # Űrlap komponensek
 │   ├── neptunCodeField.dart
 │   ├── nametextField.dart
 │   ├── passwordTextField.dart
 │   └── passwordVerField.dart
 │
-├── widgets/                     # Reusable widgets
+├── widgets/                     # Újrafelhasználható widgetek
 │   ├── customButton.dart
 │   └── customLoginRegister..dart
 │
-├── login.dart                   # Login screen
-├── register.dart                # Registration screen
-├── login_or_register.dart       # Auth switcher
-├── mainScreen.dart              # Student dashboard
-├── adminPage.dart               # Admin dashboard
-├── instructorPage.dart          # Instructor dashboard
-├── nfc.dart                     # NFC status page
-└── methodChannel.dart           # HCE test page
+├── login.dart                   # Bejelentkezési képernyő
+├── register.dart                # Regisztrációs képernyő
+├── login_or_register.dart       # Auth váltó
+├── mainScreen.dart              # Hallgatói műszerfal
+├── adminPage.dart               # Admin műszerfal
+├── instructorPage.dart          # Oktatói műszerfal
+├── nfc.dart                     # NFC státusz oldal
+└── methodChannel.dart           # HCE teszt oldal
 
 android/
 ├── app/
@@ -157,47 +157,47 @@ android/
 │           ├── AndroidManifest.xml
 │           ├── kotlin/com/example/prog24/
 │           │   ├── MainActivity.kt       # Platform channel handler
-│           │   └── HceService.kt         # NFC HCE implementation
+│           │   └── HceService.kt         # NFC HCE implementáció
 │           └── res/
 │               └── xml/
-│                   └── apduservice.xml   # HCE configuration
+│                   └── apduservice.xml   # HCE konfiguráció
 
 assets/
-└── lotties/                     # Animation files
+└── lotties/                     # Animációs fájlok
     └── Education.json
 
-docs/                            # Documentation
-├── API.md                       # API documentation
-├── NFC_HCE.md                   # NFC implementation
-└── ARCHITECTURE.md              # This file
+docs/                            # Dokumentáció
+├── API.md                       # API dokumentáció
+├── NFC_HCE.md                   # NFC implementáció
+└── ARCHITECTURE.md              # Ez a fájl
 ```
 
-## Component Details
+## Komponens Részletek
 
-### 1. Controllers
+### 1. Kontrollerek
 
-Controllers handle business logic and state management:
+A kontrollerek üzleti logikát és állapotkezelést kezelnek:
 
 #### LoginController
 
-**Responsibilities:**
-- User authentication
-- Token storage
-- Role-based routing
-- Error handling
+**Felelősségek:**
+- Felhasználó hitelesítés
+- Token tárolás
+- Szerepkör-alapú irányítás
+- Hibakezelés
 
-**Key Methods:**
-- `loginFunction(String data)` - Authenticate user
-- `setLoading(bool state)` - Update loading state
+**Fő Metódusok:**
+- `loginFunction(String data)` - Felhasználó hitelesítés
+- `setLoading(bool state)` - Betöltési állapot frissítése
 
-**State:**
-- `_isLoading: RxBool` - Loading indicator
+**Állapot:**
+- `_isLoading: RxBool` - Betöltési indikátor
 
 #### RegisterController
 
-**Responsibilities:**
-- New user registration
-- Input validation
+**Felelősségek:**
+- Új felhasználó regisztráció
+- Input validáció
 - Success/error feedback
 
 **Key Methods:**
