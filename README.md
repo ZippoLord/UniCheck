@@ -1,106 +1,106 @@
 # UniCheck
 
-UniCheck is a Flutter-based mobile application designed for university attendance management using NFC (Near Field Communication) technology with Host Card Emulation (HCE). The app allows students, instructors, and administrators to manage attendance through NFC-enabled devices.
+A UniCheck egy Flutter-alapú mobilalkalmazás, amely egyetemi jelenléti nyilvántartás kezelésére lett tervezve NFC (Near Field Communication) technológiával és Host Card Emulation (HCE) használatával. Az alkalmazás lehetővé teszi a hallgatók, oktatók és adminisztrátorok számára a jelenlét kezelését NFC-képes eszközökön keresztül.
 
-## Table of Contents
+## Tartalomjegyzék
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [API Documentation](#api-documentation)
-- [NFC/HCE Implementation](#nfchce-implementation)
-- [User Roles](#user-roles)
-- [Technologies Used](#technologies-used)
-- [Development](#development)
-- [Contributing](#contributing)
+- [Funkciók](#funkciók)
+- [Architektúra](#architektúra)
+- [Előfeltételek](#előfeltételek)
+- [Telepítés](#telepítés)
+- [Konfiguráció](#konfiguráció)
+- [Használat](#használat)
+- [Projekt Struktúra](#projekt-struktúra)
+- [API Dokumentáció](#api-dokumentáció)
+- [NFC/HCE Implementáció](#nfchce-implementáció)
+- [Felhasználói Szerepkörök](#felhasználói-szerepkörök)
+- [Használt Technológiák](#használt-technológiák)
+- [Fejlesztés](#fejlesztés)
+- [Közreműködés](#közreműködés)
 
-## Features
+## Funkciók
 
-### Core Features
-- **User Authentication**: Login and registration with Neptun code
-- **Role-Based Access**: Support for Students, Instructors, and Administrators
-- **NFC Integration**: Check attendance using NFC technology
-- **Host Card Emulation (HCE)**: Emulate NFC cards for attendance tracking
-- **JWT Authentication**: Secure token-based authentication
-- **Real-time Status**: Check NFC availability on device
+### Alapvető Funkciók
+- **Felhasználói Hitelesítés**: Bejelentkezés és regisztráció Neptun kóddal
+- **Szerepkör-alapú Hozzáférés**: Támogatás hallgatók, oktatók és adminisztrátorok számára
+- **NFC Integráció**: Jelenlét rögzítése NFC technológia használatával
+- **Host Card Emulation (HCE)**: NFC kártyák emulálása jelenléti követéshez
+- **JWT Hitelesítés**: Biztonságos token-alapú hitelesítés
+- **Valós idejű Státusz**: NFC elérhetőség ellenőrzése az eszközön
 
-### User-Specific Features
-- **Students**: Check in using NFC, view attendance records
-- **Instructors**: Manage classes and track attendance
-- **Administrators**: Full system management capabilities
+### Felhasználó-specifikus Funkciók
+- **Hallgatók**: Bejelentkezés NFC-vel, jelenléti rekordok megtekintése
+- **Oktatók**: Órák kezelése és jelenlét követése
+- **Adminisztrátorok**: Teljes rendszerkezelési képességek
 
-## Architecture
+## Architektúra
 
-UniCheck follows a clean architecture pattern with clear separation of concerns:
+A UniCheck tiszta architektúra mintát követ egyértelmű feladatok szétválasztásával:
 
 ```
 lib/
-├── controllers/       # Business logic and state management (GetX)
-├── models/           # Data models and serialization
-├── components/       # Reusable UI components
-├── widgets/          # Custom widgets
-├── *.dart            # Main application screens (login, register, etc.)
-└── constants.dart    # Configuration constants
+├── controllers/       # Üzleti logika és állapotkezelés (GetX)
+├── models/           # Adatmodellek és szerializáció
+├── components/       # Újrafelhasználható UI komponensek
+├── widgets/          # Egyedi widgetek
+├── *.dart            # Fő alkalmazás képernyők (login, register, stb.)
+└── constants.dart    # Konfigurációs konstansok
 ```
 
-### Key Architectural Patterns
-- **State Management**: GetX for reactive state management
-- **Persistent Storage**: GetStorage for local data persistence
-- **HTTP Client**: Standard http package for API communication
-- **Platform Channels**: Method channels for Android native communication
+### Fő Architektúra Minták
+- **Állapotkezelés**: GetX reaktív állapotkezeléshez
+- **Perzisztens Tárolás**: GetStorage helyi adatmegőrzéshez
+- **HTTP Kliens**: Standard http csomag API kommunikációhoz
+- **Platform Csatornák**: Method channels Android natív kommunikációhoz
 
-## Prerequisites
+## Előfeltételek
 
-- **Flutter SDK**: Version 3.9.2 or higher
-- **Dart SDK**: Included with Flutter
-- **Android Studio** or **VS Code** with Flutter extensions
-- **Android Device/Emulator**: With NFC support (API level 19+)
-- **Backend API**: Running instance of the UniCheck backend server
+- **Flutter SDK**: 3.9.2 vagy újabb verzió
+- **Dart SDK**: A Flutterrel együtt érkezik
+- **Android Studio** vagy **VS Code** Flutter bővítményekkel
+- **Android Eszköz/Emulátor**: NFC támogatással (API level 19+)
+- **Backend API**: A UniCheck backend szerver futó példánya
 
-## Installation
+## Telepítés
 
-### 1. Clone the Repository
+### 1. Repository Klónozása
 
 ```bash
 git clone https://github.com/ZippoLord/UniCheck.git
 cd UniCheck
 ```
 
-### 2. Install Dependencies
+### 2. Függőségek Telepítése
 
 ```bash
 flutter pub get
 ```
 
-### 3. Configure Backend URL
+### 3. Backend URL Konfigurálása
 
-Edit `lib/constants.dart` to point to your backend server:
+Szerkessze a `lib/constants.dart` fájlt, hogy a backend szerverre mutasson:
 
 ```dart
 String baseURL = "http://your-backend-url:port";
 ```
 
-### 4. Build and Run
+### 4. Build és Futtatás
 
-#### For Android
+#### Androidra
 ```bash
 flutter run
 ```
 
-#### For Release Build
+#### Release Build-hez
 ```bash
 flutter build apk --release
 ```
 
-## Configuration
+## Konfiguráció
 
-### Android Permissions
+### Android Engedélyek
 
-The app requires the following permissions (already configured in `AndroidManifest.xml`):
+Az alkalmazás a következő engedélyeket igényli (már konfigurálva az `AndroidManifest.xml`-ben):
 
 ```xml
 <uses-permission android:name="android.permission.NFC" />
@@ -108,100 +108,100 @@ The app requires the following permissions (already configured in `AndroidManife
 <uses-feature android:name="android.hardware.nfc" android:required="false"/>
 ```
 
-### NFC AID Configuration
+### NFC AID Konfiguráció
 
-The HCE service uses AID (Application ID): `F0010203040506`
+A HCE szolgáltatás az AID (Application ID) használja: `F0010203040506`
 
-This is configured in `android/app/src/main/res/xml/apduservice.xml`
+Ez az `android/app/src/main/res/xml/apduservice.xml` fájlban van konfigurálva
 
-## Usage
+## Használat
 
-### First Time Setup
+### Első Beállítás
 
-1. **Launch the App**: Open UniCheck on your NFC-enabled Android device
-2. **Register**: Create an account with:
-   - Full name
-   - Neptun code (university ID)
-   - Password
-   - Card ID
-3. **Login**: Use your Neptun code and password to access the app
+1. **Alkalmazás Indítása**: Nyissa meg a UniCheck-et az NFC-képes Android eszközön
+2. **Regisztráció**: Hozzon létre fiókot a következőkkel:
+   - Teljes név
+   - Neptun kód (egyetemi azonosító)
+   - Jelszó
+   - Kártya azonosító
+3. **Bejelentkezés**: Használja Neptun kódját és jelszavát az alkalmazás eléréséhez
 
-### Checking Attendance (Student)
+### Jelenlét Rögzítése (Hallgató)
 
-1. Navigate to the main screen after login
-2. Enable NFC on your device
-3. Hold your device near the instructor's NFC reader
-4. The app will automatically emulate your credentials
-5. Wait for confirmation
+1. Navigáljon a főképernyőre bejelentkezés után
+2. Kapcsolja be az NFC-t az eszközön
+3. Tartsa az eszközét az oktató NFC olvasója közelébe
+4. Az alkalmazás automatikusan emulálja az Ön hitelesítő adatait
+5. Várja meg a megerősítést
 
-### Managing Classes (Instructor)
+### Órák Kezelése (Oktató)
 
-1. Login with instructor credentials
-2. Access the instructor dashboard
-3. Enable NFC reader mode
-4. Students can check in by holding their devices nearby
+1. Jelentkezzen be oktató hitelesítő adatokkal
+2. Nyissa meg az oktató műszerfalat
+3. Kapcsolja be az NFC olvasó módot
+4. A hallgatók bejelentkezhetnek az eszközük közelítésével
 
-### System Administration
+### Rendszeradminisztráció
 
-1. Login with admin credentials
-2. Access the admin panel
-3. Manage users, classes, and system settings
+1. Jelentkezzen be admin hitelesítő adatokkal
+2. Nyissa meg az admin panelt
+3. Kezelje a felhasználókat, órákat és rendszerbeállításokat
 
-## Project Structure
+## Projekt Struktúra
 
-### Main Screens
+### Fő Képernyők
 
-- **LoginPage** (`lib/login.dart`): User authentication screen
-- **RegisterPage** (`lib/register.dart`): New user registration
-- **MainScreen** (`lib/mainScreen.dart`): Student dashboard
-- **InstructorPage** (`lib/instructorPage.dart`): Instructor dashboard
-- **AdminPage** (`lib/adminPage.dart`): Administrator dashboard
-- **NfcStatusPage** (`lib/nfc.dart`): NFC availability checker
+- **LoginPage** (`lib/login.dart`): Felhasználói hitelesítési képernyő
+- **RegisterPage** (`lib/register.dart`): Új felhasználó regisztráció
+- **MainScreen** (`lib/mainScreen.dart`): Hallgatói műszerfal
+- **InstructorPage** (`lib/instructorPage.dart`): Oktatói műszerfal
+- **AdminPage** (`lib/adminPage.dart`): Adminisztrátori műszerfal
+- **NfcStatusPage** (`lib/nfc.dart`): NFC elérhetőség ellenőrző
 
-### Controllers (GetX)
+### Kontrollerek (GetX)
 
 - **LoginController** (`lib/controllers/login_controller.dart`)
-  - Handles user authentication
-  - Manages JWT tokens
-  - Routes users based on roles
+  - Kezeli a felhasználói hitelesítést
+  - Kezeli a JWT tokeneket
+  - Irányítja a felhasználókat szerepkörök alapján
 
 - **RegisterController** (`lib/controllers/register_controller.dart`)
-  - Handles new user registration
-  - Validates user input
-  - Creates new accounts
+  - Kezeli az új felhasználói regisztrációt
+  - Validálja a felhasználói inputot
+  - Létrehozza az új fiókokat
 
 - **PasswordController** (`lib/controllers/password_controller.dart`)
-  - Manages password visibility
-  - Handles password validation
+  - Kezeli a jelszó láthatóságot
+  - Kezeli a jelszó validációt
 
-### Models
+### Modellek
 
-- **LoginModel**: User credentials for authentication
-- **LoginResponseModel**: Server response with token and user info
-- **RegisterModel**: New user registration data
-- **ApiError**: Standardized error responses
+- **LoginModel**: Felhasználói hitelesítő adatok a hitelesítéshez
+- **LoginResponseModel**: Szerver válasz sikeres bejelentkezés után
+- **RegisterModel**: Új felhasználói regisztrációs adatok
+- **ApiError**: Szabványosított hibaválaszok
 
-### Components
+### Komponensek
 
-- **NeptunCodeField**: Input field for Neptun code
-- **NameTextField**: Input field for user's name
-- **PasswordTextField**: Secure password input
-- **PasswordVerificationTextField**: Password confirmation input
-- **CustomButton**: Reusable button component
-- **CustomLoginRegisterContainer**: Container for auth screens
+- **NeptunCodeField**: Beviteli mező Neptun kódhoz
+- **NameTextField**: Beviteli mező felhasználó nevéhez
+- **PasswordTextField**: Biztonságos jelszó bevitel
+- **PasswordVerificationTextField**: Jelszó megerősítés bevitel
+- **CustomButton**: Újrafelhasználható gomb komponens
+- **CustomLoginRegisterContainer**: Konténer auth képernyőkhöz
 
-## API Documentation
+## API Dokumentáció
 
-### Base URL
+### Alap URL
 ```
 http://localhost:5188
 ```
 
-### Endpoints
+### Végpontok
 
-#### Authentication
+#### Hitelesítés
 
-**Login**
+**Bejelentkezés**
 ```http
 POST /api/Auth/login
 Content-Type: application/json
@@ -212,7 +212,7 @@ Content-Type: application/json
   "cardId": "2"
 }
 
-Response:
+Válasz:
 {
   "token": "eyJhbGciOiJIUzI1NiIs...",
   "name": "John Doe",
@@ -220,7 +220,7 @@ Response:
 }
 ```
 
-**Register**
+**Regisztráció**
 ```http
 POST /Auth/register
 Content-Type: application/json
@@ -232,33 +232,33 @@ Content-Type: application/json
   "cardId": "3"
 }
 
-Response: 200 OK
+Válasz: 200 OK
 ```
 
-### User Roles
+### Felhasználói Szerepkörök
 
-- **0**: Administrator (Full system access)
-- **1**: Instructor (Class management)
-- **2**: Student (Attendance check-in)
+- **0**: Adminisztrátor (Teljes rendszer hozzáférés)
+- **1**: Oktató (Óra kezelés)
+- **2**: Hallgató (Jelenléti bejelentkezés)
 
-### Error Handling
+### Hibakezelés
 
-All API errors follow this structure:
+Minden API hiba ezt a struktúrát követi:
 ```json
 {
-  "error": "Error type",
-  "details": "Detailed error message",
-  "stackTrace": "Stack trace information"
+  "error": "Hiba típus",
+  "details": "Részletes hibaüzenet",
+  "stackTrace": "Stack trace információ"
 }
 ```
 
-## NFC/HCE Implementation
+## NFC/HCE Implementáció
 
-### Overview
+### Áttekintés
 
-UniCheck uses Host Card Emulation (HCE) to turn Android devices into virtual NFC cards. This allows students' phones to be read by NFC readers for attendance tracking.
+A UniCheck Host Card Emulation (HCE) technológiát használ, hogy az Android eszközöket virtuális NFC kártyákká alakítsa. Ez lehetővé teszi, hogy a hallgatók telefonjait NFC olvasók olvashassák a jelenléti követéshez.
 
-### Architecture
+### Architektúra
 
 ```
 Flutter App (Dart)
@@ -270,53 +270,53 @@ HCE Service (Kotlin)
 NFC Reader
 ```
 
-### Components
+### Komponensek
 
-#### 1. Flutter Layer (`lib/methodChannel.dart`)
+#### 1. Flutter Réteg (`lib/methodChannel.dart`)
 
 ```dart
 const platform = MethodChannel('com.example.prog24/hce');
 ```
 
-Sends JSON data containing user credentials to the native Android layer.
+JSON adatokat küld, amely tartalmazza a felhasználói hitelesítő adatokat a natív Android réteghez.
 
 #### 2. MainActivity (`android/app/src/main/kotlin/com/example/prog24/MainActivity.kt`)
 
-Receives JSON from Flutter and stores it in SharedPreferences:
-- Channel: `com.example.prog24/hce`
-- Method: `setEmulatedJson`
-- Storage: Default SharedPreferences with key `emulated_json`
+JSON-t fogad a Fluttertől és SharedPreferences-ben tárolja:
+- Csatorna: `com.example.prog24/hce`
+- Metódus: `setEmulatedJson`
+- Tárolás: Alapértelmezett SharedPreferences `emulated_json` kulccsal
 
 #### 3. HCE Service (`android/app/src/main/kotlin/com/example/prog24/HceService.kt`)
 
-Implements the NFC card emulation:
+Az NFC kártya emulációt implementálja:
 
-**Key Features:**
+**Fő Funkciók:**
 - **AID**: `F0010203040506`
-- **APDU Commands**:
-  - `SELECT (INS=0xA4)`: Card selection
-  - `GET_CHUNK (INS=0x10)`: Retrieve JSON data in chunks
+- **APDU Parancsok**:
+  - `SELECT (INS=0xA4)`: Kártya kiválasztás
+  - `GET_CHUNK (INS=0x10)`: JSON adat lekérése darabokban
 
-**Data Format:**
+**Adat Formátum:**
 ```kotlin
-// Command Structure
+// Parancs Struktúra
 CLA | INS | P1 | P2 | Lc | Data | Le
 00  | 10  | 00 | 00 | 03 | offset_hi, offset_lo, length
 
-// Response
+// Válasz
 [data_chunk] | SW1 | SW2
-[...] | 90 | 00  // Success
+[...] | 90 | 00  // Sikeres
 ```
 
-**Status Words:**
-- `90 00`: Success
-- `6A 82`: File not found
-- `67 00`: Wrong length
-- `6F 00`: Unknown error
+**Státusz Szavak:**
+- `90 00`: Sikeres
+- `6A 82`: Fájl nem található
+- `67 00`: Rossz hossz
+- `6F 00`: Ismeretlen hiba
 
-### JSON Data Structure
+### JSON Adat Struktúra
 
-The emulated data contains user authentication information:
+Az emulált adat felhasználói hitelesítési információkat tartalmaz:
 ```json
 {
   "token": "JWT_TOKEN_HERE",
@@ -325,57 +325,57 @@ The emulated data contains user authentication information:
 }
 ```
 
-### NFC Flow
+### NFC Folyamat
 
-1. User logs in and credentials are stored
-2. `setEmulatedJson` is called to store user data
-3. User approaches NFC reader
-4. HCE Service receives APDU commands
-5. Service responds with user data in chunks
-6. Reader validates and records attendance
+1. A felhasználó bejelentkezik és a hitelesítő adatok tárolódnak
+2. A `setEmulatedJson` meghívásra kerül a felhasználói adatok tárolásához
+3. A felhasználó közelíti az NFC olvasót
+4. A HCE Service APDU parancsokat fogad
+5. A Service felhasználói adatokkal válaszol darabokban
+6. Az olvasó validálja és rögzíti a jelenlétet
 
-### Testing NFC
+### NFC Tesztelés
 
-Use the NFC Status page to:
-- Check if NFC is available
-- Enable/disable NFC
-- Open device NFC settings
+Használja az NFC Státusz oldalt a következőkre:
+- Ellenőrizze, hogy az NFC elérhető-e
+- NFC engedélyezése/letiltása
+- Eszköz NFC beállítások megnyitása
 
-## Technologies Used
+## Használt Technológiák
 
-### Framework & Language
-- **Flutter**: 3.9.2+ - Cross-platform UI framework
-- **Dart**: Programming language
-- **Kotlin**: Android native code
+### Framework & Programozási Nyelv
+- **Flutter**: 3.9.2+ - Többplatformos UI framework
+- **Dart**: Programozási nyelv
+- **Kotlin**: Android natív kód
 
-### State Management
-- **GetX** (^4.7.2): Reactive state management and dependency injection
+### Állapotkezelés
+- **GetX** (^4.7.2): Reaktív állapotkezelés és dependency injection
 
-### Storage
-- **GetStorage** (^2.1.1): Fast local key-value storage
+### Tárolás
+- **GetStorage** (^2.1.1): Gyors helyi kulcs-érték tárolás
 
-### Networking
-- **http** (^1.5.0): HTTP client for API communication
+### Hálózatkezelés
+- **http** (^1.5.0): HTTP kliens API kommunikációhoz
 
 ### NFC
-- **nfc_manager** (^4.1.1): NFC functionality
-- **Android HCE**: Native Host Card Emulation
+- **nfc_manager** (^4.1.1): NFC funkcionalitás
+- **Android HCE**: Natív Host Card Emulation
 
-### Security
-- **encrypt** (^5.0.3): Data encryption utilities
-- **JWT**: Token-based authentication
+### Biztonság
+- **encrypt** (^5.0.3): Adat titkosítási segédprogramok
+- **JWT**: Token-alapú hitelesítés
 
 ### UI/UX
-- **Lottie** (^3.3.2): Animations
-- **Cupertino Icons** (^1.0.8): iOS-style icons
+- **Lottie** (^3.3.2): Animációk
+- **Cupertino Icons** (^1.0.8): iOS-stílusú ikonok
 
-### Permissions
-- **permission_handler** (^12.0.1): Runtime permission management
-- **app_settings** (^6.1.1): Open system settings
+### Engedélyek
+- **permission_handler** (^12.0.1): Futásidejű engedélykezelés
+- **app_settings** (^6.1.1): Rendszerbeállítások megnyitása
 
-## Development
+## Fejlesztés
 
-### Running in Development Mode
+### Futtatás Fejlesztői Módban
 
 ```bash
 flutter run --debug
@@ -383,21 +383,21 @@ flutter run --debug
 
 ### Hot Reload
 
-Press `r` in the terminal to hot reload, or `R` for hot restart.
+Nyomja meg az `r` gombot a terminálban a hot reload-hoz, vagy az `R` gombot a hot restart-hoz.
 
-### Checking Code Quality
+### Kódminőség Ellenőrzése
 
 ```bash
 flutter analyze
 ```
 
-### Running Tests
+### Tesztek Futtatása
 
 ```bash
 flutter test
 ```
 
-### Building for Production
+### Build Produkciós Környezethez
 
 ```bash
 # Android APK
@@ -407,36 +407,36 @@ flutter build apk --release
 flutter build appbundle --release
 ```
 
-### Debug Logs
+### Debug Logok
 
-The app uses print statements for debugging. View logs with:
+Az alkalmazás print utasításokat használ a debuggoláshoz. Nézze meg a logokat:
 
 ```bash
 flutter logs
 ```
 
-Or in Android Studio via the Logcat window.
+Vagy Android Studioban a Logcat ablakon keresztül.
 
-## Contributing
+## Közreműködés
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Forkoljaarepository-t
+2. Hozzon létre egy feature branchet (`git checkout -b feature/amazing-feature`)
+3. Commitolja a változtatásokat (`git commit -m 'Add amazing feature'`)
+4. Pusholja a branchbe (`git push origin feature/amazing-feature`)
+5. Nyisson Pull Request-et
 
-## License
+## Licenc
 
-This project is part of an academic project. Please contact the repository owner for licensing information.
+Ez a projekt egy akadémiai projekt része. Kérjük, vegye fel a kapcsolatot a repository tulajdonosával licencelési információkért.
 
-## Support
+## Támogatás
 
-For issues and questions:
-- Open an issue on GitHub
-- Contact the development team
+Problémák és kérdések esetén:
+- Nyisson issue-t a GitHubon
+- Vegye fel a kapcsolatot a fejlesztői csapattal
 
-## Acknowledgments
+## Köszönetnyilvánítás
 
-- Flutter and Dart teams for the excellent framework
-- GetX community for state management solutions
-- NFC community for HCE documentation and examples
+- A Flutter és Dart csapatoknak a kiváló frameworkért
+- A GetX közösségnek az állapotkezelési megoldásokért
+- Az NFC közösségnek a HCE dokumentációért és példákért
