@@ -1,0 +1,877 @@
+# UniCheck Architecture Documentation
+
+This document describes the architecture, design patterns, and technical decisions behind the UniCheck mobile application.
+
+## System Overview
+
+UniCheck is a Flutter-based cross-platform mobile application for university attendance management using NFC technology. The application follows clean architecture principles with clear separation of concerns.
+
+## Technology Stack
+
+### Frontend (Mobile App)
+- **Framework:** Flutter 3.9.2+
+- **Language:** Dart
+- **State Management:** GetX
+- **Storage:** GetStorage
+- **HTTP Client:** http package
+- **Animations:** Lottie
+
+### Backend Integration
+- **Authentication:** JWT (JSON Web Tokens)
+- **API Communication:** REST
+- **Data Format:** JSON
+
+### Native Integration
+- **Platform:** Android (Kotlin)
+- **NFC:** Host Card Emulation (HCE)
+- **Communication:** Platform Channels
+
+## Architecture Patterns
+
+### 1. Clean Architecture
+
+The application follows clean architecture principles with clear layer separation:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  Presentation Layer                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │   Screens    │  │   Widgets    │  │  Components  │  │
+│  │  (UI/Pages)  │  │   (Custom)   │  │  (Reusable)  │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└────────────────────────┬────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────┐
+│                   Business Logic Layer                   │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │            Controllers (GetX)                     │  │
+│  │  - LoginController                                │  │
+│  │  - RegisterController                             │  │
+│  │  - PasswordController                             │  │
+│  └──────────────────────────────────────────────────┘  │
+└────────────────────────┬────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────┐
+│                      Data Layer                          │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │    Models    │  │  API Client  │  │   Storage    │  │
+│  │   (DTOs)     │  │    (HTTP)    │  │ (GetStorage) │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────┐
+│              Platform-Specific Layer                     │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │        Android Native (Kotlin)                    │  │
+│  │  - MainActivity (Method Channel Handler)          │  │
+│  │  - HCE Service (NFC Emulation)                    │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 2. State Management (GetX)
+
+UniCheck uses GetX for reactive state management, providing:
+- **Dependency Injection:** Simple controller instantiation
+- **Reactive Programming:** Automatic UI updates
+- **Route Management:** Simple navigation
+- **State Persistence:** Local storage integration
+
+**Controller Pattern:**
+
+```dart
+class LoginController extends GetxController {
+  // Observable state
+  RxBool _isLoading = false.obs;
+  bool get isLoading => _isLoading.value;
+  
+  // Business logic
+  void loginFunction(String data) async {
+    _isLoading.value = true;
+    try {
+      // API call and processing
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+}
+```
+
+### 3. Repository Pattern
+
+API communication follows the repository pattern (implicitly):
+
+```
+Controller → HTTP Client → API Endpoint
+     ↓
+   Model (DTO)
+     ↓
+   Storage (Cache)
+```
+
+## Project Structure
+
+### Directory Organization
+
+```
+lib/
+├── main.dart                    # Application entry point
+├── constants.dart               # Global constants (API URLs)
+├── login_or_register.dart       # Auth switcher page
+│
+├── controllers/                 # Business logic (GetX)
+│   ├── login_controller.dart
+│   ├── register_controller.dart
+│   └── password_controller.dart
+│
+├── models/                      # Data models (DTOs)
+│   ├── login_model.dart
+│   ├── login_response.dart
+│   ├── register_model.dart
+│   ├── register_response_model.dart
+│   └── api_error.dart
+│
+├── components/                  # Form components
+│   ├── neptunCodeField.dart
+│   ├── nametextField.dart
+│   ├── passwordTextField.dart
+│   └── passwordVerField.dart
+│
+├── widgets/                     # Reusable widgets
+│   ├── customButton.dart
+│   └── customLoginRegister..dart
+│
+└── screens/                     # Application screens
+    ├── login.dart
+    ├── register.dart
+    ├── mainScreen.dart          # Student dashboard
+    ├── instructorPage.dart      # Instructor dashboard
+    ├── adminPage.dart           # Admin dashboard
+    ├── nfc.dart                 # NFC status page
+    └── methodChannel.dart       # HCE test page
+
+android/
+├── app/
+│   └── src/
+│       └── main/
+│           ├── AndroidManifest.xml
+│           ├── kotlin/com/example/prog24/
+│           │   ├── MainActivity.kt       # Platform channel handler
+│           │   └── HceService.kt         # NFC HCE implementation
+│           └── res/
+│               └── xml/
+│                   └── apduservice.xml   # HCE configuration
+
+assets/
+└── lotties/                     # Animation files
+    └── Education.json
+
+docs/                            # Documentation
+├── API.md                       # API documentation
+├── NFC_HCE.md                   # NFC implementation
+└── ARCHITECTURE.md              # This file
+```
+
+## Component Details
+
+### 1. Controllers
+
+Controllers handle business logic and state management:
+
+#### LoginController
+
+**Responsibilities:**
+- User authentication
+- Token storage
+- Role-based routing
+- Error handling
+
+**Key Methods:**
+- `loginFunction(String data)` - Authenticate user
+- `setLoading(bool state)` - Update loading state
+
+**State:**
+- `_isLoading: RxBool` - Loading indicator
+
+#### RegisterController
+
+**Responsibilities:**
+- New user registration
+- Input validation
+- Success/error feedback
+
+**Key Methods:**
+- `registerFunction(String data)` - Create new account
+- `setLoading(bool state)` - Update loading state
+
+**State:**
+- `_isLoading: RxBool` - Loading indicator
+
+#### PasswordController
+
+**Responsibilities:**
+- Password visibility toggle
+- Password validation
+
+**State:**
+- `_obscurePassword: RxBool` - Password visibility state
+
+### 2. Models
+
+Models represent data structures used throughout the app:
+
+#### Data Flow
+
+```
+User Input → Model.toJson() → JSON String → HTTP Request
+                                                  ↓
+HTTP Response → JSON String → Model.fromJson() → Model Object
+```
+
+#### Key Models
+
+**LoginModel**
+- Input model for authentication
+- Fields: neptunCode, password, cardId
+
+**LoginResponseModel**
+- Response from successful login
+- Fields: token, name, role
+
+**RegisterModel**
+- Input model for registration
+- Fields: name, neptunCode, password, cardId
+
+**ApiError**
+- Standard error response
+- Fields: error, details, stackTrace
+
+### 3. Screens
+
+Screens represent complete pages in the application:
+
+#### Authentication Flow
+
+```
+App Start
+    ↓
+LoginOrRegister (State: showLoginPage)
+    ↓
+    ├─→ LoginPage (showLoginPage = true)
+    │       ↓
+    │   Login Success
+    │       ↓
+    │   Role Check
+    │       ├─→ role == 2 → MainScreen (Student)
+    │       ├─→ role == 0 → AdminPage (Admin)
+    │       └─→ role == 1 → InstructorPage (Instructor)
+    │
+    └─→ RegisterPage (showLoginPage = false)
+            ↓
+        Registration Success
+            ↓
+        Redirect to LoginPage
+```
+
+### 4. Native Integration
+
+#### Platform Channel Architecture
+
+```
+┌────────────────────────────────────────┐
+│         Flutter (Dart)                  │
+│                                         │
+│  platform.invokeMethod(                 │
+│    'setEmulatedJson',                   │
+│    {'json': jsonData}                   │
+│  )                                      │
+└───────────────┬────────────────────────┘
+                │
+        MethodChannel
+  ('com.example.prog24/hce')
+                │
+┌───────────────▼────────────────────────┐
+│      Android Native (Kotlin)           │
+│                                         │
+│  MethodChannel.setMethodCallHandler {  │
+│    when (call.method) {                │
+│      "setEmulatedJson" -> {            │
+│        // Store JSON                   │
+│      }                                 │
+│    }                                   │
+│  }                                     │
+└────────────────────────────────────────┘
+```
+
+## Data Flow Diagrams
+
+### 1. User Login Flow
+
+```
+┌──────┐    ┌──────────┐    ┌────────────┐    ┌────────┐
+│ User │    │   UI     │    │ Controller │    │  API   │
+└──┬───┘    └────┬─────┘    └─────┬──────┘    └───┬────┘
+   │             │                 │                │
+   │ 1. Enter    │                 │                │
+   │ credentials │                 │                │
+   ├────────────>│                 │                │
+   │             │ 2. Tap Login    │                │
+   │             │                 │                │
+   │             │ 3. Create       │                │
+   │             │    LoginModel   │                │
+   │             ├────────────────>│                │
+   │             │                 │                │
+   │             │                 │ 4. POST        │
+   │             │                 │    /login      │
+   │             │                 ├───────────────>│
+   │             │                 │                │
+   │             │                 │ 5. JWT Token   │
+   │             │                 │<───────────────┤
+   │             │                 │                │
+   │             │                 │ 6. Store Token │
+   │             │                 │    in Storage  │
+   │             │                 │                │
+   │             │ 7. Navigate     │                │
+   │             │    by Role      │                │
+   │             │<────────────────┤                │
+   │             │                 │                │
+   │ 8. Show     │                 │                │
+   │ Dashboard   │                 │                │
+   │<────────────┤                 │                │
+```
+
+### 2. NFC Emulation Setup Flow
+
+```
+┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
+│  Login   │  │ Flutter  │  │ Android  │  │   HCE    │
+│ Success  │  │  Layer   │  │ Native   │  │ Service  │
+└────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘
+     │             │              │              │
+     │ 1. Token    │              │              │
+     │    Received │              │              │
+     ├────────────>│              │              │
+     │             │              │              │
+     │             │ 2. Create    │              │
+     │             │    JSON      │              │
+     │             │    Payload   │              │
+     │             │              │              │
+     │             │ 3. Method    │              │
+     │             │    Channel   │              │
+     │             │    Call      │              │
+     │             ├─────────────>│              │
+     │             │              │              │
+     │             │              │ 4. Store in  │
+     │             │              │    SharedPref│
+     │             │              ├─────────────>│
+     │             │              │              │
+     │             │              │              │
+     │             │ 5. Success   │              │
+     │             │<─────────────┤              │
+     │             │              │              │
+     │ 6. Ready    │              │              │
+     │    for NFC  │              │              │
+     │<────────────┤              │              │
+     │             │              │              │
+     │         NFC Reader Approaches             │
+     │             │              │              │
+     │             │              │  7. APDU     │
+     │             │              │     Commands │
+     │             │              │<─────────────┤
+     │             │              │              │
+     │             │              │  8. Read     │
+     │             │              │     JSON     │
+     │             │              │     from     │
+     │             │              │     Storage  │
+     │             │              │              │
+     │             │              │  9. Return   │
+     │             │              │     Data     │
+     │             │              │─────────────>│
+```
+
+### 3. Registration Flow
+
+```
+┌──────┐    ┌──────────┐    ┌────────────┐    ┌────────┐
+│ User │    │   UI     │    │ Controller │    │  API   │
+└──┬───┘    └────┬─────┘    └─────┬──────┘    └───┬────┘
+   │             │                 │                │
+   │ 1. Fill     │                 │                │
+   │ Form        │                 │                │
+   ├────────────>│                 │                │
+   │             │ 2. Tap Register │                │
+   │             │                 │                │
+   │             │ 3. Create       │                │
+   │             │ RegisterModel   │                │
+   │             ├────────────────>│                │
+   │             │                 │                │
+   │             │                 │ 4. POST        │
+   │             │                 │ /register      │
+   │             │                 ├───────────────>│
+   │             │                 │                │
+   │             │                 │ 5. Success     │
+   │             │                 │    Response    │
+   │             │                 │<───────────────┤
+   │             │                 │                │
+   │             │ 6. Show Success │                │
+   │             │    Message      │                │
+   │             │<────────────────┤                │
+   │             │                 │                │
+   │             │ 7. Navigate to  │                │
+   │             │    Login        │                │
+   │             │                 │                │
+   │ 8. Login    │                 │                │
+   │ Page Shown  │                 │                │
+   │<────────────┤                 │                │
+```
+
+## Design Patterns
+
+### 1. Observer Pattern (GetX)
+
+Used for reactive state management:
+
+```dart
+// Observable state
+RxBool _isLoading = false.obs;
+
+// UI automatically updates when state changes
+Obx(() {
+  if (controller.isLoading) {
+    return CircularProgressIndicator();
+  }
+  return LoginForm();
+})
+```
+
+### 2. Singleton Pattern (GetStorage)
+
+Used for persistent storage:
+
+```dart
+final box = GetStorage();
+
+// Single instance accessed throughout app
+box.write("token", token);
+String? token = box.read("token");
+```
+
+### 3. Factory Pattern (Model Parsing)
+
+Used for JSON deserialization:
+
+```dart
+factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
+  LoginResponseModel(
+    token: json["token"],
+    name: json["name"],
+    role: json["role"],
+  );
+```
+
+### 4. Strategy Pattern (Role-Based Navigation)
+
+Used for different user type handling:
+
+```dart
+if (data.role == 2) {
+  Get.offAll(() => Mainscreen());
+} else if (data.role == 0) {
+  Get.offAll(() => AdminPage());
+} else {
+  Get.offAll(() => InstructorPage());
+}
+```
+
+## Security Architecture
+
+### 1. Authentication Security
+
+```
+┌─────────────────────────────────────────┐
+│         Client (Mobile App)              │
+│                                          │
+│  1. User credentials                     │
+│     ↓                                    │
+│  2. HTTPS POST /login                    │
+│     ↓                                    │
+│  3. Receive JWT Token                    │
+│     ↓                                    │
+│  4. Store in GetStorage                  │
+│     (device-local, encrypted OS storage) │
+│     ↓                                    │
+│  5. Include in Authorization header      │
+│     for subsequent requests              │
+└─────────────────────────────────────────┘
+```
+
+### 2. Data Storage Security
+
+**Sensitive Data:**
+- JWT tokens stored in GetStorage (uses native encrypted storage)
+- No passwords stored locally
+- Token cleared on logout
+
+**Non-Sensitive Data:**
+- User preferences
+- UI state
+- Cached responses
+
+### 3. Network Security
+
+**Current Implementation:**
+- HTTP-based communication
+- JWT authentication
+- HTTPS should be used in production
+
+**Recommendations:**
+- Implement certificate pinning
+- Use HTTPS exclusively
+- Implement request signing
+- Add request throttling
+
+### 4. NFC Security
+
+**Current Implementation:**
+- Short-range communication (< 4cm)
+- JWT token transmitted
+- APDU protocol
+
+**Security Measures:**
+- Proximity requirement
+- Token expiration
+- Server-side validation
+
+**Recommendations:**
+- Encrypt NFC payload
+- Implement replay protection
+- Add nonce/timestamp
+- Use challenge-response
+
+## Performance Considerations
+
+### 1. State Management Optimization
+
+**GetX Benefits:**
+- Minimal rebuilds (only affected widgets)
+- Lazy loading of controllers
+- Automatic memory management
+
+**Best Practices:**
+```dart
+// ✅ Good: Only rebuild when needed
+Obx(() => Text(controller.username))
+
+// ❌ Bad: Rebuild entire widget tree
+GetBuilder<LoginController>(
+  builder: (controller) => EntireScreen()
+)
+```
+
+### 2. Image and Asset Optimization
+
+**Lottie Animations:**
+- JSON-based (small file size)
+- Hardware accelerated
+- Cached by framework
+
+**Asset Management:**
+```yaml
+assets:
+  - assets/lotties/  # Only load when needed
+```
+
+### 3. Network Optimization
+
+**Current Implementation:**
+- Synchronous HTTP requests
+- No caching
+- No retry mechanism
+
+**Recommendations:**
+- Implement request caching
+- Add retry logic with exponential backoff
+- Use connection pooling
+- Implement request debouncing
+
+### 4. Memory Management
+
+**GetX Controller Lifecycle:**
+```dart
+// Controllers automatically disposed when not needed
+Get.delete<LoginController>(force: true);
+Get.put(LoginController());  // Create new instance
+```
+
+**Best Practices:**
+- Dispose controllers when not needed
+- Clear large data structures
+- Use const constructors where possible
+
+## Testing Strategy
+
+### 1. Unit Tests
+
+**Target:** Business logic in controllers
+
+```dart
+test('Login controller sets loading state', () {
+  final controller = LoginController();
+  controller.setLoading = true;
+  expect(controller.isLoading, true);
+});
+```
+
+### 2. Widget Tests
+
+**Target:** UI components
+
+```dart
+testWidgets('Login button triggers login', (tester) async {
+  await tester.pumpWidget(LoginPage());
+  await tester.tap(find.text('Bejelentkezés'));
+  await tester.pump();
+  // Verify expected behavior
+});
+```
+
+### 3. Integration Tests
+
+**Target:** Complete user flows
+
+```dart
+testWidgets('Complete login flow', (tester) async {
+  // 1. Launch app
+  // 2. Enter credentials
+  // 3. Tap login
+  // 4. Verify navigation
+});
+```
+
+### 4. Platform Tests
+
+**Target:** Native integration
+
+- Test Method Channel communication
+- Test HCE service responses
+- Test NFC transactions
+
+## Deployment Architecture
+
+### 1. Build Process
+
+```bash
+# Development build
+flutter run --debug
+
+# Release build
+flutter build apk --release
+flutter build appbundle --release
+```
+
+### 2. Configuration Management
+
+**Environment-Specific Configuration:**
+
+```dart
+// constants.dart
+String baseURL = const String.fromEnvironment(
+  'API_URL',
+  defaultValue: 'http://localhost:5188'
+);
+```
+
+**Build with configuration:**
+```bash
+flutter build apk --dart-define=API_URL=https://api.production.com
+```
+
+### 3. Version Management
+
+**pubspec.yaml:**
+```yaml
+version: 1.0.0+1
+#        │ │ │  └─ Build number
+#        │ │ └──── Patch version
+#        │ └────── Minor version
+#        └──────── Major version
+```
+
+## Scalability Considerations
+
+### 1. Current Limitations
+
+- Single backend URL
+- No request caching
+- No offline mode
+- Limited error recovery
+
+### 2. Scalability Improvements
+
+**Backend:**
+- Implement load balancing
+- Add CDN for static assets
+- Database read replicas
+- API rate limiting
+
+**Mobile App:**
+- Implement offline-first architecture
+- Add request queue
+- Implement background sync
+- Add local database (SQLite)
+
+### 3. Future Architecture
+
+```
+┌────────────────────────────────────────┐
+│         Mobile App (Flutter)            │
+│                                         │
+│  ┌──────────────────────────────────┐  │
+│  │     Offline-First Layer          │  │
+│  │  - Local SQLite DB               │  │
+│  │  - Request Queue                 │  │
+│  │  - Background Sync               │  │
+│  └──────────────────────────────────┘  │
+│                 ↓                       │
+│  ┌──────────────────────────────────┐  │
+│  │     API Layer                    │  │
+│  │  - Caching                       │  │
+│  │  - Retry Logic                   │  │
+│  │  - Request Signing               │  │
+│  └──────────────────────────────────┘  │
+└─────────────────┬───────────────────────┘
+                  │
+        ┌─────────▼─────────┐
+        │   Load Balancer   │
+        └─────────┬─────────┘
+                  │
+        ┌─────────▼─────────┐
+        │   API Gateway     │
+        │  - Rate Limiting  │
+        │  - Auth           │
+        └─────────┬─────────┘
+                  │
+     ┌────────────┼────────────┐
+     │            │            │
+┌────▼────┐  ┌───▼────┐  ┌───▼────┐
+│ API     │  │ API    │  │ API    │
+│ Server  │  │ Server │  │ Server │
+│   #1    │  │   #2   │  │   #3   │
+└────┬────┘  └───┬────┘  └───┬────┘
+     └───────────┼────────────┘
+                 │
+        ┌────────▼─────────┐
+        │    Database      │
+        │  - Primary       │
+        │  - Replicas      │
+        └──────────────────┘
+```
+
+## Maintenance and Monitoring
+
+### 1. Logging
+
+**Current Implementation:**
+```dart
+print('Login successful');
+print('Error: $e');
+```
+
+**Recommended:**
+```dart
+import 'package:logger/logger.dart';
+
+final logger = Logger();
+
+logger.i('Login successful');
+logger.e('Error occurred', error: e, stackTrace: trace);
+```
+
+### 2. Error Tracking
+
+**Recommended Tools:**
+- Firebase Crashlytics
+- Sentry
+- Custom error reporting
+
+### 3. Analytics
+
+**Track:**
+- User flows
+- Feature usage
+- Error rates
+- Performance metrics
+
+**Recommended Tools:**
+- Firebase Analytics
+- Google Analytics
+- Mixpanel
+
+### 4. App Updates
+
+**Strategy:**
+- Semantic versioning
+- Staged rollouts
+- A/B testing
+- Feature flags
+
+## Documentation Maintenance
+
+### 1. Code Documentation
+
+**Standard:**
+```dart
+/// Authenticates a user with the provided credentials.
+///
+/// [data] - JSON string containing neptunCode, password, and cardId
+///
+/// Throws [Exception] if network request fails
+///
+/// Returns void, but updates internal state and navigates on success
+void loginFunction(String data) async {
+  // Implementation
+}
+```
+
+### 2. Architecture Decision Records (ADRs)
+
+Document major technical decisions:
+- Why GetX for state management?
+- Why HCE instead of NDEF?
+- Why REST instead of GraphQL?
+
+### 3. API Documentation
+
+Maintain up-to-date API documentation:
+- Endpoint specifications
+- Request/response examples
+- Error codes
+- Authentication requirements
+
+## Conclusion
+
+UniCheck follows modern Flutter development practices with:
+- Clean architecture
+- Reactive state management
+- Platform-specific integration
+- Security-conscious design
+
+The architecture is designed to be:
+- **Maintainable:** Clear separation of concerns
+- **Testable:** Isolated business logic
+- **Scalable:** Room for growth
+- **Secure:** Authentication and authorization
+
+Future improvements should focus on:
+- Offline-first architecture
+- Enhanced security
+- Performance optimization
+- Comprehensive testing
+- Better error handling
+
+## References
+
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [GetX Documentation](https://pub.dev/packages/get)
+- [Android HCE Guide](https://developer.android.com/guide/topics/connectivity/nfc/hce)
+- [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
