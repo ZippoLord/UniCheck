@@ -43,7 +43,7 @@ lib/
 ├── models/           # Data models and serialization
 ├── components/       # Reusable UI components
 ├── widgets/          # Custom widgets
-├── screens/          # Main application screens
+├── *.dart            # Main application screens (login, register, etc.)
 └── constants.dart    # Configuration constants
 ```
 

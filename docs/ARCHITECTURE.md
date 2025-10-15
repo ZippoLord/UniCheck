@@ -141,14 +141,14 @@ lib/
 │   ├── customButton.dart
 │   └── customLoginRegister..dart
 │
-└── screens/                     # Application screens
-    ├── login.dart
-    ├── register.dart
-    ├── mainScreen.dart          # Student dashboard
-    ├── instructorPage.dart      # Instructor dashboard
-    ├── adminPage.dart           # Admin dashboard
-    ├── nfc.dart                 # NFC status page
-    └── methodChannel.dart       # HCE test page
+├── login.dart                   # Login screen
+├── register.dart                # Registration screen
+├── login_or_register.dart       # Auth switcher
+├── mainScreen.dart              # Student dashboard
+├── adminPage.dart               # Admin dashboard
+├── instructorPage.dart          # Instructor dashboard
+├── nfc.dart                     # NFC status page
+└── methodChannel.dart           # HCE test page
 
 android/
 ├── app/

@@ -140,14 +140,14 @@ UniCheck/
 │   │   ├── customButton.dart
 │   │   └── customLoginRegister..dart
 │   │
-│   └── [screens]/                   # App pages
-│       ├── login.dart
-│       ├── register.dart
-│       ├── mainScreen.dart
-│       ├── adminPage.dart
-│       ├── instructorPage.dart
-│       ├── nfc.dart
-│       └── methodChannel.dart
+│   ├── login.dart                   # Login screen
+│   ├── register.dart                # Registration screen
+│   ├── login_or_register.dart       # Auth switcher
+│   ├── mainScreen.dart              # Student dashboard
+│   ├── adminPage.dart               # Admin dashboard
+│   ├── instructorPage.dart          # Instructor dashboard
+│   ├── nfc.dart                     # NFC status page
+│   └── methodChannel.dart           # HCE test page
 │
 ├── android/
 │   └── app/src/main/kotlin/com/example/prog24/
