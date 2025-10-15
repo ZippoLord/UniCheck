@@ -1,50 +1,50 @@
-# UniCheck Architecture Documentation
+# UniCheck Architektúra Dokumentáció
 
-This document describes the architecture, design patterns, and technical decisions behind the UniCheck mobile application.
+Ez a dokumentum leírja az UniCheck mobilalkalmazás architektúráját, tervezési mintáit és technikai döntéseit.
 
-## System Overview
+## Rendszer Áttekintés
 
-UniCheck is a Flutter-based cross-platform mobile application for university attendance management using NFC technology. The application follows clean architecture principles with clear separation of concerns.
+A UniCheck egy Flutter-alapú többplatformos mobilalkalmazás egyetemi jelenléti nyilvántartás kezelésére NFC technológia használatával. Az alkalmazás tiszta architektúra elveket követ egyértelmű feladatok szétválasztásával.
 
-## Technology Stack
+## Technológiai Stack
 
-### Frontend (Mobile App)
+### Frontend (Mobilalkalmazás)
 - **Framework:** Flutter 3.9.2+
-- **Language:** Dart
-- **State Management:** GetX
-- **Storage:** GetStorage
-- **HTTP Client:** http package
-- **Animations:** Lottie
+- **Nyelv:** Dart
+- **Állapotkezelés:** GetX
+- **Tárolás:** GetStorage
+- **HTTP Kliens:** http csomag
+- **Animációk:** Lottie
 
-### Backend Integration
-- **Authentication:** JWT (JSON Web Tokens)
-- **API Communication:** REST
-- **Data Format:** JSON
+### Backend Integráció
+- **Hitelesítés:** JWT (JSON Web Tokens)
+- **API Kommunikáció:** REST
+- **Adat Formátum:** JSON
 
-### Native Integration
+### Natív Integráció
 - **Platform:** Android (Kotlin)
 - **NFC:** Host Card Emulation (HCE)
-- **Communication:** Platform Channels
+- **Kommunikáció:** Platform Csatornák
 
-## Architecture Patterns
+## Architektúra Minták
 
-### 1. Clean Architecture
+### 1. Tiszta Architektúra
 
-The application follows clean architecture principles with clear layer separation:
+Az alkalmazás tiszta architektúra elveket követ egyértelmű réteg szétválasztással:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  Presentation Layer                      │
+│                  Prezentációs Réteg                      │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Screens    │  │   Widgets    │  │  Components  │  │
-│  │  (UI/Pages)  │  │   (Custom)   │  │  (Reusable)  │  │
+│  │  Képernyők   │  │   Widgetek   │  │  Komponensek │  │
+│  │  (UI/Pages)  │  │   (Egyedi)   │  │(Újrahaszn.)  │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └────────────────────────┬────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│                   Business Logic Layer                   │
+│                 Üzleti Logika Réteg                      │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │            Controllers (GetX)                     │  │
+│  │            Kontrollerek (GetX)                    │  │
 │  │  - LoginController                                │  │
 │  │  - RegisterController                             │  │
 │  │  - PasswordController                             │  │
@@ -52,44 +52,44 @@ The application follows clean architecture principles with clear layer separatio
 └────────────────────────┬────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│                      Data Layer                          │
+│                      Adat Réteg                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │    Models    │  │  API Client  │  │   Storage    │  │
-│  │   (DTOs)     │  │    (HTTP)    │  │ (GetStorage) │  │
+│  │   Modellek   │  │  API Kliens  │  │   Tárolás    │  │
+│  │   (DTOk)     │  │    (HTTP)    │  │ (GetStorage) │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └─────────────────────────────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────┐
-│              Platform-Specific Layer                     │
+│             Platform-Specifikus Réteg                    │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │        Android Native (Kotlin)                    │  │
+│  │        Android Natív (Kotlin)                     │  │
 │  │  - MainActivity (Method Channel Handler)          │  │
-│  │  - HCE Service (NFC Emulation)                    │  │
+│  │  - HCE Service (NFC Emuláció)                     │  │
 │  └──────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 2. State Management (GetX)
+### 2. Állapotkezelés (GetX)
 
-UniCheck uses GetX for reactive state management, providing:
-- **Dependency Injection:** Simple controller instantiation
-- **Reactive Programming:** Automatic UI updates
-- **Route Management:** Simple navigation
-- **State Persistence:** Local storage integration
+A UniCheck GetX-et használ reaktív állapotkezeléshez, amely biztosítja:
+- **Dependency Injection:** Egyszerű kontroller példányosítás
+- **Reaktív Programozás:** Automatikus UI frissítések
+- **Útvonal Kezelés:** Egyszerű navigáció
+- **Állapot Perzisztencia:** Helyi tárolás integráció
 
-**Controller Pattern:**
+**Kontroller Minta:**
 
 ```dart
 class LoginController extends GetxController {
-  // Observable state
+  // Megfigyelhető állapot
   RxBool _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
   
-  // Business logic
+  // Üzleti logika
   void loginFunction(String data) async {
     _isLoading.value = true;
     try {
-      // API call and processing
+      // API hívás és feldolgozás
     } finally {
       _isLoading.value = false;
     }
@@ -97,58 +97,58 @@ class LoginController extends GetxController {
 }
 ```
 
-### 3. Repository Pattern
+### 3. Repository Minta
 
-API communication follows the repository pattern (implicitly):
+Az API kommunikáció követi a repository mintát (implicit módon):
 
 ```
-Controller → HTTP Client → API Endpoint
+Kontroller → HTTP Kliens → API Végpont
      ↓
    Model (DTO)
      ↓
-   Storage (Cache)
+   Tárolás (Cache)
 ```
 
-## Project Structure
+## Projekt Struktúra
 
-### Directory Organization
+### Könyvtár Szervezés
 
 ```
 lib/
-├── main.dart                    # Application entry point
-├── constants.dart               # Global constants (API URLs)
-├── login_or_register.dart       # Auth switcher page
+├── main.dart                    # Alkalmazás belépési pont
+├── constants.dart               # Globális konstansok (API URL-ek)
+├── login_or_register.dart       # Auth váltó oldal
 │
-├── controllers/                 # Business logic (GetX)
+├── controllers/                 # Üzleti logika (GetX)
 │   ├── login_controller.dart
 │   ├── register_controller.dart
 │   └── password_controller.dart
 │
-├── models/                      # Data models (DTOs)
+├── models/                      # Adat modellek (DTOk)
 │   ├── login_model.dart
 │   ├── login_response.dart
 │   ├── register_model.dart
 │   ├── register_response_model.dart
 │   └── api_error.dart
 │
-├── components/                  # Form components
+├── components/                  # Űrlap komponensek
 │   ├── neptunCodeField.dart
 │   ├── nametextField.dart
 │   ├── passwordTextField.dart
 │   └── passwordVerField.dart
 │
-├── widgets/                     # Reusable widgets
+├── widgets/                     # Újrafelhasználható widgetek
 │   ├── customButton.dart
 │   └── customLoginRegister..dart
 │
-├── login.dart                   # Login screen
-├── register.dart                # Registration screen
-├── login_or_register.dart       # Auth switcher
-├── mainScreen.dart              # Student dashboard
-├── adminPage.dart               # Admin dashboard
-├── instructorPage.dart          # Instructor dashboard
-├── nfc.dart                     # NFC status page
-└── methodChannel.dart           # HCE test page
+├── login.dart                   # Bejelentkezési képernyő
+├── register.dart                # Regisztrációs képernyő
+├── login_or_register.dart       # Auth váltó
+├── mainScreen.dart              # Hallgatói műszerfal
+├── adminPage.dart               # Admin műszerfal
+├── instructorPage.dart          # Oktatói műszerfal
+├── nfc.dart                     # NFC státusz oldal
+└── methodChannel.dart           # HCE teszt oldal
 
 android/
 ├── app/
@@ -157,47 +157,47 @@ android/
 │           ├── AndroidManifest.xml
 │           ├── kotlin/com/example/prog24/
 │           │   ├── MainActivity.kt       # Platform channel handler
-│           │   └── HceService.kt         # NFC HCE implementation
+│           │   └── HceService.kt         # NFC HCE implementáció
 │           └── res/
 │               └── xml/
-│                   └── apduservice.xml   # HCE configuration
+│                   └── apduservice.xml   # HCE konfiguráció
 
 assets/
-└── lotties/                     # Animation files
+└── lotties/                     # Animációs fájlok
     └── Education.json
 
-docs/                            # Documentation
-├── API.md                       # API documentation
-├── NFC_HCE.md                   # NFC implementation
-└── ARCHITECTURE.md              # This file
+docs/                            # Dokumentáció
+├── API.md                       # API dokumentáció
+├── NFC_HCE.md                   # NFC implementáció
+└── ARCHITECTURE.md              # Ez a fájl
 ```
 
-## Component Details
+## Komponens Részletek
 
-### 1. Controllers
+### 1. Kontrollerek
 
-Controllers handle business logic and state management:
+A kontrollerek üzleti logikát és állapotkezelést kezelnek:
 
 #### LoginController
 
-**Responsibilities:**
-- User authentication
-- Token storage
-- Role-based routing
-- Error handling
+**Felelősségek:**
+- Felhasználó hitelesítés
+- Token tárolás
+- Szerepkör-alapú irányítás
+- Hibakezelés
 
-**Key Methods:**
-- `loginFunction(String data)` - Authenticate user
-- `setLoading(bool state)` - Update loading state
+**Fő Metódusok:**
+- `loginFunction(String data)` - Felhasználó hitelesítés
+- `setLoading(bool state)` - Betöltési állapot frissítése
 
-**State:**
-- `_isLoading: RxBool` - Loading indicator
+**Állapot:**
+- `_isLoading: RxBool` - Betöltési indikátor
 
 #### RegisterController
 
-**Responsibilities:**
-- New user registration
-- Input validation
+**Felelősségek:**
+- Új felhasználó regisztráció
+- Input validáció
 - Success/error feedback
 
 **Key Methods:**

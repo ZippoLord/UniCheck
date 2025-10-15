@@ -1,37 +1,37 @@
-# UniCheck API Documentation
+# UniCheck API Dokumentáció
 
-This document provides detailed information about the API endpoints used by the UniCheck mobile application.
+Ez a dokumentum részletes információkat nyújt a UniCheck mobilalkalmazás által használt API végpontokról.
 
-## Base Configuration
+## Alap Konfiguráció
 
 ### Backend URL
-Configure in `lib/constants.dart`:
+Konfigurálja a `lib/constants.dart` fájlban:
 ```dart
 String baseURL = "http://localhost:5188";
 ```
 
-### Authentication
-Most endpoints require JWT authentication. Include the token in the Authorization header:
+### Hitelesítés
+A legtöbb végpont JWT hitelesítést igényel. Tegye hozzá a tokent az Authorization fejlécbe:
 ```
 Authorization: Bearer <your_jwt_token>
 ```
 
-## Endpoints
+## Végpontok
 
-### Authentication Endpoints
+### Hitelesítési Végpontok
 
-#### 1. User Registration
+#### 1. Felhasználó Regisztráció
 
-**Endpoint:** `POST /Auth/register`
+**Végpont:** `POST /Auth/register`
 
-**Description:** Creates a new user account in the system.
+**Leírás:** Új felhasználói fiókot hoz létre a rendszerben.
 
-**Headers:**
+**Fejlécek:**
 ```http
 Content-Type: application/json
 ```
 
-**Request Body:**
+**Kérés Törzs:**
 ```json
 {
   "name": "John Doe",
@@ -41,15 +41,15 @@ Content-Type: application/json
 }
 ```
 
-**Parameters:**
-| Field | Type | Required | Description |
+**Paraméterek:**
+| Mező | Típus | Kötelező | Leírás |
 |-------|------|----------|-------------|
-| name | string | Yes | Full name of the user |
-| neptunCode | string | Yes | University Neptun identification code |
-| password | string | Yes | User's password (minimum 6 characters) |
-| cardId | string | Yes | Physical card ID for NFC |
+| name | string | Igen | A felhasználó teljes neve |
+| neptunCode | string | Igen | Egyetemi Neptun azonosító kód |
+| password | string | Igen | Felhasználó jelszava (minimum 6 karakter) |
+| cardId | string | Igen | Fizikai kártya azonosító NFC-hez |
 
-**Success Response (200 OK):**
+**Sikeres Válasz (200 OK):**
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -58,16 +58,16 @@ Content-Type: application/json
 }
 ```
 
-**Error Response (400 Bad Request):**
+**Hiba Válasz (400 Bad Request):**
 ```json
 {
   "error": "ValidationError",
-  "details": "Neptun code already exists",
+  "details": "Neptun kód már létezik",
   "stackTrace": "..."
 }
 ```
 
-**Example Usage (Dart):**
+**Használati Példa (Dart):**
 ```dart
 final model = RegisterModel(
   name: "John Doe",
@@ -85,19 +85,19 @@ final response = await http.post(
 
 ---
 
-#### 2. User Login
+#### 2. Felhasználó Bejelentkezés
 
-**Endpoint:** `POST /api/Auth/login`
+**Végpont:** `POST /api/Auth/login`
 
-**Description:** Authenticates a user and returns a JWT token.
+**Leírás:** Hitelesíti a felhasználót és JWT tokent ad vissza.
 
-**Headers:**
+**Fejlécek:**
 ```http
 Content-Type: application/json
 Authorization: Bearer <optional_existing_token>
 ```
 
-**Request Body:**
+**Kérés Törzs:**
 ```json
 {
   "neptunCode": "ABC123",
@@ -106,14 +106,14 @@ Authorization: Bearer <optional_existing_token>
 }
 ```
 
-**Parameters:**
-| Field | Type | Required | Description |
+**Paraméterek:**
+| Mező | Típus | Kötelező | Leírás |
 |-------|------|----------|-------------|
-| neptunCode | string | Yes | University Neptun identification code |
-| password | string | Yes | User's password |
-| cardId | string | Yes | Physical card ID for validation |
+| neptunCode | string | Igen | Egyetemi Neptun azonosító kód |
+| password | string | Igen | Felhasználó jelszava |
+| cardId | string | Igen | Fizikai kártya azonosító validáláshoz |
 
-**Success Response (200 OK):**
+**Sikeres Válasz (200 OK):**
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5IiwidW5pcXVlX25hbWUiOiJiZW4iLCJuZXB0dW4iOiJ0ZXN0MTIzIiwicm9sZSI6IlN0dWRlbnQiLCJuYmYiOjE3NjA0NDg3MTcsImV4cCI6MTc2MDQ3NzUxNywiaWF0IjoxNzYwNDQ4NzE3fQ.zW_TqEyleqsr-3au01yzSufzFpijeuDE0z-sOxTlxEs",
@@ -122,23 +122,23 @@ Authorization: Bearer <optional_existing_token>
 }
 ```
 
-**Response Fields:**
-| Field | Type | Description |
+**Válasz Mezők:**
+| Mező | Típus | Leírás |
 |-------|------|-------------|
-| token | string | JWT authentication token |
-| name | string | User's name |
-| role | integer | User role (0=Admin, 1=Instructor, 2=Student) |
+| token | string | JWT hitelesítési token |
+| name | string | Felhasználó neve |
+| role | integer | Felhasználói szerepkör (0=Admin, 1=Oktató, 2=Hallgató) |
 
-**Error Response (401 Unauthorized):**
+**Hiba Válasz (401 Unauthorized):**
 ```json
 {
   "error": "AuthenticationError",
-  "details": "Invalid neptun code or password",
+  "details": "Érvénytelen neptun kód vagy jelszó",
   "stackTrace": "..."
 }
 ```
 
-**Example Usage (Dart):**
+**Használati Példa (Dart):**
 ```dart
 final model = LoginModel(
   neptunCode: "ABC123",
@@ -157,7 +157,7 @@ final response = await http.post(
 
 if (response.statusCode == 200) {
   LoginResponseModel data = loginResponseModelFromJson(response.body);
-  // Store token and user data
+  // Token és felhasználói adatok tárolása
   box.write("userData", jsonEncode(data));
   box.write("token", data.token);
 }
@@ -165,37 +165,37 @@ if (response.statusCode == 200) {
 
 ---
 
-## User Roles
+## Felhasználói Szerepkörök
 
-The system supports three user roles with different access levels:
+A rendszer három felhasználói szerepkört támogat különböző hozzáférési szintekkel:
 
-| Role | Value | Description | Access |
+| Szerepkör | Érték | Leírás | Hozzáférés |
 |------|-------|-------------|--------|
-| Admin | 0 | System Administrator | Full system access, user management |
-| Instructor | 1 | Teacher/Professor | Class management, attendance tracking |
-| Student | 2 | Student | Attendance check-in, view own records |
+| Admin | 0 | Rendszer Adminisztrátor | Teljes rendszer hozzáférés, felhasználó kezelés |
+| Oktató | 1 | Tanár/Professzor | Óra kezelés, jelenléti követés |
+| Hallgató | 2 | Diák | Jelenléti bejelentkezés, saját rekordok megtekintése |
 
-### Role-Based Routing
+### Szerepkör-alapú Irányítás
 
-After successful login, users are routed based on their role:
+Sikeres bejelentkezés után a felhasználók szerepkörük alapján irányítódnak:
 
 ```dart
 if (data.role == 2) {
-  Get.offAll(() => Mainscreen());  // Student
+  Get.offAll(() => Mainscreen());  // Hallgató
 } else if (data.role == 0) {
   Get.offAll(() => AdminPage());   // Admin
 } else {
-  Get.offAll(() => InstructorPage());  // Instructor
+  Get.offAll(() => InstructorPage());  // Oktató
 }
 ```
 
 ---
 
-## Data Models
+## Adat Modellek
 
 ### LoginModel
 
-**Purpose:** Represents user credentials for authentication
+**Cél:** Felhasználói hitelesítő adatokat reprezentál a hitelesítéshez
 
 ```dart
 class LoginModel {
@@ -219,7 +219,7 @@ class LoginModel {
 
 ### LoginResponseModel
 
-**Purpose:** Represents the server response after successful login
+**Cél:** A szerver válaszát reprezentálja sikeres bejelentkezés után
 
 ```dart
 class LoginResponseModel {
@@ -244,7 +244,7 @@ class LoginResponseModel {
 
 ### RegisterModel
 
-**Purpose:** Represents new user registration data
+**Cél:** Új felhasználói regisztrációs adatokat reprezentál
 
 ```dart
 class RegisterModel {
@@ -271,7 +271,7 @@ class RegisterModel {
 
 ### ApiError
 
-**Purpose:** Standardized error response structure
+**Cél:** Szabványosított hibaválasz struktúra
 
 ```dart
 class ApiError {
@@ -296,89 +296,89 @@ class ApiError {
 
 ---
 
-## Error Handling
+## Hibakezelés
 
-### Error Response Structure
+### Hibaválasz Struktúra
 
-All API errors follow this consistent structure:
+Minden API hiba ezt a következetes struktúrát követi:
 
 ```json
 {
   "error": "ErrorType",
-  "details": "Human-readable error message",
-  "stackTrace": "Technical stack trace (for debugging)"
+  "details": "Ember által olvasható hibaüzenet",
+  "stackTrace": "Technikai stack trace (debuggoláshoz)"
 }
 ```
 
-### Common Error Codes
+### Gyakori Hibakódok
 
-| HTTP Code | Error Type | Description |
+| HTTP Kód | Hiba Típus | Leírás |
 |-----------|------------|-------------|
-| 400 | ValidationError | Invalid request data |
-| 401 | AuthenticationError | Invalid credentials or token |
-| 403 | AuthorizationError | Insufficient permissions |
-| 404 | NotFoundError | Resource not found |
-| 500 | ServerError | Internal server error |
+| 400 | ValidationError | Érvénytelen kérés adat |
+| 401 | AuthenticationError | Érvénytelen hitelesítő adatok vagy token |
+| 403 | AuthorizationError | Nincs elegendő jogosultság |
+| 404 | NotFoundError | Erőforrás nem található |
+| 500 | ServerError | Belső szerver hiba |
 
-### Error Handling Example
+### Hibakezelési Példa
 
 ```dart
 try {
   var response = await http.post(url, headers: headers, body: data);
   
   if (response.statusCode == 200) {
-    // Success
+    // Sikeres
     LoginResponseModel data = loginResponseModelFromJson(response.body);
-    // Process data
+    // Adat feldolgozása
   } else {
-    // Error
+    // Hiba
     var error = apiErrorFromJson(response.body);
     Get.snackbar(
-      "Error",
+      "Hiba",
       error.details,
       colorText: Colors.white,
       backgroundColor: Colors.redAccent,
     );
   }
 } catch (e) {
-  // Network or parsing error
-  print('Exception: $e');
+  // Hálózati vagy elemzési hiba
+  print('Kivétel: $e');
 }
 ```
 
 ---
 
-## JWT Token Management
+## JWT Token Kezelés
 
-### Token Storage
+### Token Tárolás
 
-Tokens are stored locally using GetStorage:
+A tokenek helyben tárolódnak GetStorage használatával:
 
 ```dart
-// Save token
+// Token mentése
 box.write("token", data.token);
 
-// Retrieve token
+// Token lekérése
 String? token = box.read("token");
 
-// Use in API calls
+// Használat API hívásokban
 Map<String, String> headers = {
   'Content-Type': 'application/json',
   'Authorization': 'Bearer ${box.read("token")}'
 };
 ```
 
-### Token Structure
+### Token Struktúra
 
-The JWT token contains:
-- User ID (`nameid`)
-- Username (`unique_name`)
-- Neptun code (`neptun`)
-- Role (`role`)
-- Expiration (`exp`)
-- Issued at (`iat`)
+A JWT token tartalmazza:
+- Felhasználó ID (`nameid`)
+- Felhasználónév (`unique_name`)
+- Neptun kód (`neptun`)
+- Szerepkör (`role`)
+- Lejárat (`exp`)
+- Kibocsátva (`iat`)
 
-Example decoded payload:
+Példa dekódolt payload:
 ```json
 {
   "nameid": "9",
@@ -391,67 +391,67 @@ Example decoded payload:
 }
 ```
 
-### Token Expiration
+### Token Lejárat
 
-- Tokens expire after a set period (configured on backend)
-- Always check token validity before critical operations
-- Implement token refresh mechanism if needed
+- A tokenek egy beállított időszak után lejárnak (backend-en konfigurálva)
+- Mindig ellenőrizze a token érvényességét kritikus műveletek előtt
+- Implementáljon token frissítési mechanizmust ha szükséges
 
 ---
 
-## Best Practices
+## Legjobb Gyakorlatok
 
-### 1. Secure Storage
-- Never store passwords in plain text
-- Use secure storage for tokens
-- Clear sensitive data on logout
+### 1. Biztonságos Tárolás
+- Soha ne tárolja a jelszavakat egyszerű szövegként
+- Használjon biztonságos tárolást a tokenekhez
+- Törölje az érzékeny adatokat kijelentkezéskor
 
-### 2. Network Error Handling
+### 2. Hálózati Hibakezelés
 ```dart
 try {
   var response = await http.post(url, headers: headers, body: data);
-  // Process response
+  // Válasz feldolgozása
 } catch (e) {
-  // Handle network errors
+  // Hálózati hibák kezelése
   if (e is SocketException) {
-    // No internet connection
+    // Nincs internet kapcsolat
   } else if (e is TimeoutException) {
-    // Request timeout
+    // Kérés timeout
   }
 }
 ```
 
-### 3. Loading States
+### 3. Betöltési Állapotok
 ```dart
 class LoginController extends GetxController {
   RxBool _isLoading = false.obs;
   
   void loginFunction(String data) async {
-    _isLoading.value = true;  // Show loading
+    _isLoading.value = true;  // Betöltés megjelenítése
     
     try {
-      // API call
+      // API hívás
     } finally {
-      _isLoading.value = false;  // Hide loading
+      _isLoading.value = false;  // Betöltés elrejtése
     }
   }
 }
 ```
 
-### 4. User Feedback
+### 4. Felhasználói Visszajelzés
 ```dart
-// Success message
+// Siker üzenet
 Get.snackbar(
-  "Success",
-  "Login successful!",
+  "Sikeres",
+  "Bejelentkezés sikeres!",
   colorText: Colors.white,
   backgroundColor: Colors.blue,
 );
 
-// Error message
+// Hiba üzenet
 Get.snackbar(
-  "Error",
-  "Invalid credentials",
+  "Hiba",
+  "Érvénytelen hitelesítő adatok",
   colorText: Colors.white,
   backgroundColor: Colors.redAccent,
 );
@@ -459,11 +459,11 @@ Get.snackbar(
 
 ---
 
-## Testing API Endpoints
+## API Végpontok Tesztelése
 
-### Using cURL
+### cURL Használata
 
-**Login:**
+**Bejelentkezés:**
 ```bash
 curl -X POST http://localhost:5188/api/Auth/login \
   -H "Content-Type: application/json" \
@@ -474,7 +474,7 @@ curl -X POST http://localhost:5188/api/Auth/login \
   }'
 ```
 
-**Register:**
+**Regisztráció:**
 ```bash
 curl -X POST http://localhost:5188/Auth/register \
   -H "Content-Type: application/json" \
@@ -486,56 +486,56 @@ curl -X POST http://localhost:5188/Auth/register \
   }'
 ```
 
-### Using Postman
+### Postman Használata
 
-1. Set request type to POST
-2. Enter the endpoint URL
-3. Add headers:
+1. Állítsa a kérés típusát POST-ra
+2. Írja be a végpont URL-t
+3. Adja hozzá a fejléceket:
    - `Content-Type: application/json`
-   - `Authorization: Bearer <token>` (if needed)
-4. Add JSON body
-5. Send request
+   - `Authorization: Bearer <token>` (ha szükséges)
+4. Adja hozzá a JSON törzsöt
+5. Küldje el a kérést
 
 ---
 
-## Rate Limiting
+## Sebességkorlátozás
 
-(To be implemented)
+(Implementálandó)
 
-Consider implementing rate limiting on the backend:
-- Max 5 login attempts per minute per IP
-- Max 3 registration attempts per hour per IP
-- Token refresh rate limiting
-
----
-
-## Future API Endpoints (Planned)
-
-### Attendance Management
-- `POST /api/Attendance/checkin` - Student check-in
-- `GET /api/Attendance/history` - View attendance history
-- `GET /api/Attendance/class/{classId}` - Class attendance report
-
-### Class Management
-- `GET /api/Classes` - List all classes
-- `POST /api/Classes` - Create new class
-- `GET /api/Classes/{id}` - Get class details
-- `PUT /api/Classes/{id}` - Update class
-- `DELETE /api/Classes/{id}` - Delete class
-
-### User Management (Admin)
-- `GET /api/Users` - List all users
-- `GET /api/Users/{id}` - Get user details
-- `PUT /api/Users/{id}` - Update user
-- `DELETE /api/Users/{id}` - Delete user
-- `POST /api/Users/{id}/reset-password` - Reset user password
+Fontolja meg a sebességkorlátozás implementálását a backend-en:
+- Maximum 5 bejelentkezési kísérlet percenként IP-nként
+- Maximum 3 regisztrációs kísérlet óránként IP-nként
+- Token frissítés sebességkorlátozása
 
 ---
 
-## Contact & Support
+## Jövőbeli API Végpontok (Tervezett)
 
-For API-related questions or issues:
-- Check the backend server logs
-- Verify network connectivity
-- Ensure correct API endpoint URLs
-- Validate request/response data formats
+### Jelenléti Kezelés
+- `POST /api/Attendance/checkin` - Hallgatói bejelentkezés
+- `GET /api/Attendance/history` - Jelenléti előzmények megtekintése
+- `GET /api/Attendance/class/{classId}` - Órai jelenléti jelentés
+
+### Óra Kezelés
+- `GET /api/Classes` - Összes óra listázása
+- `POST /api/Classes` - Új óra létrehozása
+- `GET /api/Classes/{id}` - Óra részletek lekérése
+- `PUT /api/Classes/{id}` - Óra frissítése
+- `DELETE /api/Classes/{id}` - Óra törlése
+
+### Felhasználó Kezelés (Admin)
+- `GET /api/Users` - Összes felhasználó listázása
+- `GET /api/Users/{id}` - Felhasználó részletek lekérése
+- `PUT /api/Users/{id}` - Felhasználó frissítése
+- `DELETE /api/Users/{id}` - Felhasználó törlése
+- `POST /api/Users/{id}/reset-password` - Felhasználó jelszó visszaállítása
+
+---
+
+## Kapcsolat és Támogatás
+
+API-val kapcsolatos kérdések vagy problémák esetén:
+- Ellenőrizze a backend szerver logokat
+- Ellenőrizze a hálózati kapcsolatot
+- Győződjön meg a helyes API végpont URL-ekről
+- Validálja a kérés/válasz adat formátumokat

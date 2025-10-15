@@ -1,83 +1,83 @@
-# UniCheck Quick Reference
+# UniCheck Gyors Referencia
 
-A quick reference guide for common tasks and commands in UniCheck development.
+Gyors referencia útmutató a gyakori feladatokhoz és parancsokhoz a UniCheck fejlesztésében.
 
-## Quick Links
+## Gyors Linkek
 
-- [Main README](../README.md)
-- [Setup Guide](SETUP.md)
-- [API Documentation](API.md)
-- [NFC/HCE Guide](NFC_HCE.md)
-- [Architecture](ARCHITECTURE.md)
-- [Contributing](CONTRIBUTING.md)
+- [Fő README](../README.md)
+- [Telepítési Útmutató](SETUP.md)
+- [API Dokumentáció](API.md)
+- [NFC/HCE Útmutató](NFC_HCE.md)
+- [Architektúra](ARCHITECTURE.md)
+- [Közreműködés](CONTRIBUTING.md)
 
-## Common Commands
+## Gyakori Parancsok
 
-### Flutter Commands
+### Flutter Parancsok
 
 ```bash
-# Get dependencies
+# Függőségek letöltése
 flutter pub get
 
-# Run app (debug mode)
+# Alkalmazás futtatása (debug mód)
 flutter run
 
-# Run with hot reload
+# Futtatás hot reload-dal
 flutter run --debug
 
-# Build release APK
+# Release APK build
 flutter build apk --release
 
-# Build app bundle
+# App bundle build
 flutter build appbundle --release
 
-# Clean build files
+# Build fájlok tisztítása
 flutter clean
 
-# Analyze code
+# Kód elemzése
 flutter analyze
 
-# Format code
+# Kód formázása
 flutter format lib/
 
-# Run tests
+# Tesztek futtatása
 flutter test
 
-# Check Flutter setup
+# Flutter beállítás ellenőrzése
 flutter doctor
 
-# List devices
+# Eszközök listázása
 flutter devices
 
-# View logs
+# Logok megtekintése
 flutter logs
 ```
 
-### Git Commands
+### Git Parancsok
 
 ```bash
-# Clone repository
+# Repository klónozása
 git clone https://github.com/ZippoLord/UniCheck.git
 
-# Create new branch
+# Új branch létrehozása
 git checkout -b feature/feature-name
 
-# Check status
+# Státusz ellenőrzése
 git status
 
-# Stage changes
+# Változtatások hozzáadása
 git add .
 
-# Commit changes
+# Commit készítése
 git commit -m "feat: add feature"
 
-# Push to remote
+# Push a remote-ba
 git push origin feature/feature-name
 
-# Pull latest changes
+# Legújabb változtatások húzása
 git pull origin main
 
-# Sync with upstream
+# Szinkronizálás upstream-mel
 git fetch upstream
 git merge upstream/main
 ```
@@ -85,76 +85,76 @@ git merge upstream/main
 ### Android Debug Bridge (ADB)
 
 ```bash
-# List connected devices
+# Csatlakoztatott eszközök listázása
 adb devices
 
-# Install APK
+# APK telepítése
 adb install app-release.apk
 
-# Uninstall app
+# Alkalmazás eltávolítása
 adb uninstall com.example.prog24
 
-# View logs
+# Logok megtekintése
 adb logcat
 
-# Filter logs
+# Logok szűrése
 adb logcat | grep "flutter"
 
-# Clear app data
+# Alkalmazás adatainak törlése
 adb shell pm clear com.example.prog24
 
-# Take screenshot
+# Képernyőkép készítése
 adb shell screencap -p /sdcard/screenshot.png
 adb pull /sdcard/screenshot.png
 
-# Check NFC status
+# NFC státusz ellenőrzése
 adb shell dumpsys nfc
 ```
 
-## File Structure Quick Reference
+## Fájl Struktúra Gyors Referencia
 
 ```
 UniCheck/
 ├── lib/
-│   ├── main.dart                    # App entry point
-│   ├── constants.dart               # API URL configuration
+│   ├── main.dart                    # Alkalmazás belépési pont
+│   ├── constants.dart               # API URL konfiguráció
 │   │
-│   ├── controllers/                 # Business logic
+│   ├── controllers/                 # Üzleti logika
 │   │   ├── login_controller.dart
 │   │   ├── register_controller.dart
 │   │   └── password_controller.dart
 │   │
-│   ├── models/                      # Data models
+│   ├── models/                      # Adat modellek
 │   │   ├── login_model.dart
 │   │   ├── login_response.dart
 │   │   ├── register_model.dart
 │   │   └── api_error.dart
 │   │
-│   ├── components/                  # Form inputs
+│   ├── components/                  # Űrlap bevitelek
 │   │   ├── neptunCodeField.dart
 │   │   ├── nametextField.dart
 │   │   ├── passwordTextField.dart
 │   │   └── passwordVerField.dart
 │   │
-│   ├── widgets/                     # Reusable widgets
+│   ├── widgets/                     # Újrafelhasználható widgetek
 │   │   ├── customButton.dart
 │   │   └── customLoginRegister..dart
 │   │
-│   ├── login.dart                   # Login screen
-│   ├── register.dart                # Registration screen
-│   ├── login_or_register.dart       # Auth switcher
-│   ├── mainScreen.dart              # Student dashboard
-│   ├── adminPage.dart               # Admin dashboard
-│   ├── instructorPage.dart          # Instructor dashboard
-│   ├── nfc.dart                     # NFC status page
-│   └── methodChannel.dart           # HCE test page
+│   ├── login.dart                   # Bejelentkezési képernyő
+│   ├── register.dart                # Regisztrációs képernyő
+│   ├── login_or_register.dart       # Auth váltó
+│   ├── mainScreen.dart              # Hallgatói műszerfal
+│   ├── adminPage.dart               # Admin műszerfal
+│   ├── instructorPage.dart          # Oktatói műszerfal
+│   ├── nfc.dart                     # NFC státusz oldal
+│   └── methodChannel.dart           # HCE teszt oldal
 │
 ├── android/
 │   └── app/src/main/kotlin/com/example/prog24/
 │       ├── MainActivity.kt          # Method channel handler
-│       └── HceService.kt            # NFC HCE service
+│       └── HceService.kt            # NFC HCE szolgáltatás
 │
-├── docs/                            # Documentation
+├── docs/                            # Dokumentáció
 │   ├── API.md
 │   ├── ARCHITECTURE.md
 │   ├── NFC_HCE.md
@@ -162,46 +162,46 @@ UniCheck/
 │   ├── CONTRIBUTING.md
 │   └── QUICK_REFERENCE.md
 │
-└── test/                            # Tests
+└── test/                            # Tesztek
     └── widget_test.dart
 ```
 
-## Configuration
+## Konfiguráció
 
 ### Backend URL
 
-**File:** `lib/constants.dart`
+**Fájl:** `lib/constants.dart`
 ```dart
-String baseURL = "http://localhost:5188";  // Change this
+String baseURL = "http://localhost:5188";  // Változtassa meg ezt
 ```
 
-**Local development:**
+**Helyi fejlesztés:**
 ```dart
 String baseURL = "http://localhost:5188";
 ```
 
-**Testing on device (use your computer's local IP):**
+**Tesztelés eszközön (használja a számítógép helyi IP-címét):**
 ```dart
 String baseURL = "http://192.168.1.100:5188";
 ```
 
-**Production:**
+**Produkció:**
 ```dart
 String baseURL = "https://api.yourdomain.com";
 ```
 
 ### NFC AID
 
-**File:** `android/app/src/main/res/xml/apduservice.xml`
+**Fájl:** `android/app/src/main/res/xml/apduservice.xml`
 ```xml
 <aid-filter android:name="F0010203040506"/>
 ```
 
-## API Endpoints
+## API Végpontok
 
-### Authentication
+### Hitelesítés
 
-**Login:**
+**Bejelentkezés:**
 ```http
 POST /api/Auth/login
 Content-Type: application/json
@@ -213,7 +213,7 @@ Content-Type: application/json
 }
 ```
 
-**Register:**
+**Regisztráció:**
 ```http
 POST /Auth/register
 Content-Type: application/json
@@ -226,17 +226,17 @@ Content-Type: application/json
 }
 ```
 
-## User Roles
+## Felhasználói Szerepkörök
 
-| Role | Value | Description |
+| Szerepkör | Érték | Leírás |
 |------|-------|-------------|
-| Admin | 0 | Full system access |
-| Instructor | 1 | Class management |
-| Student | 2 | Attendance check-in |
+| Admin | 0 | Teljes rendszer hozzáférés |
+| Oktató | 1 | Óra kezelés |
+| Hallgató | 2 | Jelenléti bejelentkezés |
 
-## Code Snippets
+## Kód Részletek
 
-### Create a New Controller
+### Új Kontroller Létrehozása
 
 ```dart
 import 'package:get/get.dart';
@@ -248,7 +248,7 @@ class MyController extends GetxController {
   Future<void> fetchData() async {
     _isLoading.value = true;
     try {
-      // Your logic here
+      // Az Ön logikája itt
     } finally {
       _isLoading.value = false;
     }
@@ -256,7 +256,7 @@ class MyController extends GetxController {
 }
 ```
 
-### Use Controller in Widget
+### Kontroller Használata Widgetben
 
 ```dart
 class MyPage extends StatelessWidget {
@@ -276,7 +276,7 @@ class MyPage extends StatelessWidget {
 }
 ```
 
-### API Call with Error Handling
+### API Hívás Hibakezeléssel
 
 ```dart
 Future<void> apiCall() async {
@@ -288,103 +288,103 @@ Future<void> apiCall() async {
     );
     
     if (response.statusCode == 200) {
-      // Success
+      // Sikeres
       final data = jsonDecode(response.body);
     } else {
-      // Error
+      // Hiba
       final error = apiErrorFromJson(response.body);
-      Get.snackbar('Error', error.details);
+      Get.snackbar('Hiba', error.details);
     }
   } catch (e) {
-    Get.snackbar('Error', 'Network error: $e');
+    Get.snackbar('Hiba', 'Hálózati hiba: $e');
   }
 }
 ```
 
-### Show Snackbar
+### Snackbar Megjelenítése
 
 ```dart
-// Success message
+// Siker üzenet
 Get.snackbar(
-  'Success',
-  'Operation completed',
+  'Sikeres',
+  'Művelet befejezve',
   backgroundColor: Colors.green,
   colorText: Colors.white,
 );
 
-// Error message
+// Hiba üzenet
 Get.snackbar(
-  'Error',
-  'Something went wrong',
+  'Hiba',
+  'Valami hiba történt',
   backgroundColor: Colors.red,
   colorText: Colors.white,
 );
 ```
 
-### Navigate Between Pages
+### Navigálás Oldalak Között
 
 ```dart
-// Push new page
+// Új oldal megnyitása
 Get.to(() => NewPage());
 
-// Replace current page
+// Jelenlegi oldal cseréje
 Get.off(() => NewPage());
 
-// Clear stack and navigate
+// Stack törlése és navigálás
 Get.offAll(() => HomePage());
 
-// Navigate back
+// Vissza navigálás
 Get.back();
 ```
 
-### Store Data Locally
+### Adatok Helyi Tárolása
 
 ```dart
 import 'package:get_storage/get_storage.dart';
 
 final box = GetStorage();
 
-// Write data
+// Adat írása
 box.write('key', 'value');
 box.write('token', userToken);
 
-// Read data
+// Adat olvasása
 String? value = box.read('key');
 String? token = box.read('token');
 
-// Remove data
+// Adat eltávolítása
 box.remove('key');
 
-// Clear all data
+// Minden adat törlése
 box.erase();
 ```
 
-## NFC/HCE Quick Reference
+## NFC/HCE Gyors Referencia
 
-### APDU Commands
+### APDU Parancsok
 
-**SELECT Command:**
+**SELECT Parancs:**
 ```
 00 A4 04 00 07 F0 01 02 03 04 05 06
 ```
 
-**GET_CHUNK Command:**
+**GET_CHUNK Parancs:**
 ```
 00 10 00 00 03 [offset_hi] [offset_lo] [length]
 ```
 
-### Status Words
+### Státusz Szavak
 
-| Code | Hex | Meaning |
+| Kód | Hex | Jelentés |
 |------|-----|---------|
-| Success | 90 00 | Command executed successfully |
-| File not found | 6A 82 | Invalid offset or no data |
-| Wrong length | 67 00 | Invalid Lc field |
-| Unknown | 6F 00 | Command not recognized |
+| Sikeres | 90 00 | Parancs sikeresen végrehajtva |
+| Fájl nem található | 6A 82 | Érvénytelen offset vagy nincs adat |
+| Rossz hossz | 67 00 | Érvénytelen Lc mező |
+| Ismeretlen | 6F 00 | Parancs nem felismerhető |
 
 ### Method Channel
 
-**Send JSON to HCE:**
+**JSON küldése HCE-be:**
 ```dart
 const platform = MethodChannel('com.example.prog24/hce');
 
@@ -393,168 +393,168 @@ await platform.invokeMethod('setEmulatedJson', {
 });
 ```
 
-## Troubleshooting
+## Hibaelhárítás
 
-### Common Issues
+### Gyakori Problémák
 
-| Issue | Solution |
+| Probléma | Megoldás |
 |-------|----------|
-| Flutter not found | Add Flutter to PATH |
-| Android licenses | Run `flutter doctor --android-licenses` |
-| Gradle build failed | Run `flutter clean && flutter pub get` |
-| Device not detected | Enable USB debugging |
-| NFC not working | Check NFC enabled in settings |
-| API connection failed | Check backend URL and firewall |
+| Flutter nem található | Adja hozzá a Flutter-t a PATH-hoz |
+| Android licencek | Futtassa a `flutter doctor --android-licenses` parancsot |
+| Gradle build sikertelen | Futtassa a `flutter clean && flutter pub get` parancsot |
+| Eszköz nem észlelhető | Engedélyezze az USB hibakeresést |
+| NFC nem működik | Ellenőrizze, hogy az NFC engedélyezve van-e a beállításokban |
+| API kapcsolat sikertelen | Ellenőrizze a backend URL-t és a tűzfalat |
 
-### Debug Commands
+### Debug Parancsok
 
 ```bash
-# View Flutter version
+# Flutter verzió megtekintése
 flutter --version
 
-# Check for issues
+# Problémák ellenőrzése
 flutter doctor -v
 
-# Clean build
+# Build tisztítása
 flutter clean
 flutter pub get
 
-# Rebuild app
+# Alkalmazás újraépítése
 flutter run --debug
 
-# View detailed logs
+# Részletes logok megtekintése
 flutter logs -v
 ```
 
-## Testing
+## Tesztelés
 
-### Run Tests
+### Tesztek Futtatása
 
 ```bash
-# All tests
+# Minden teszt
 flutter test
 
-# Specific test
+# Konkrét teszt
 flutter test test/widget_test.dart
 
-# With coverage
+# Lefedettséggel
 flutter test --coverage
 
-# Watch mode (auto-run on changes)
+# Watch mód (automatikus futtatás változtatáskor)
 flutter test --watch
 ```
 
-### Write Widget Test
+### Widget Teszt Írása
 
 ```dart
-testWidgets('Button tap test', (WidgetTester tester) async {
+testWidgets('Gomb kattintás teszt', (WidgetTester tester) async {
   await tester.pumpWidget(MyApp());
   
   await tester.tap(find.byType(ElevatedButton));
   await tester.pump();
   
-  expect(find.text('Success'), findsOneWidget);
+  expect(find.text('Sikeres'), findsOneWidget);
 });
 ```
 
-## Performance
+## Teljesítmény
 
-### Profile App
+### Alkalmazás Profilozása
 
 ```bash
-# Run in profile mode
+# Futtatás profile módban
 flutter run --profile
 
-# Open DevTools
+# DevTools megnyitása
 flutter pub global activate devtools
 flutter pub global run devtools
 ```
 
-### Optimization Tips
+### Optimalizálási Tippek
 
-- Use `const` constructors
-- Avoid rebuilding entire tree
-- Dispose controllers
-- Use `ListView.builder` for long lists
-- Optimize images
-- Profile before optimizing
+- Használjon `const` konstruktorokat
+- Kerülje el a teljes fa újraépítését
+- Dispose-olja a kontrollereket
+- Használjon `ListView.builder`-t hosszú listákhoz
+- Optimalizálja a képeket
+- Profilozzon optimalizálás előtt
 
-## Keyboard Shortcuts
+## Billentyű Parancsikonok
 
 ### VS Code
 
-| Shortcut | Action |
+| Parancsikon | Művelet |
 |----------|--------|
 | `Ctrl+Space` | Auto-complete |
-| `Ctrl+.` | Quick fixes |
-| `F5` | Start debugging |
-| `Shift+F5` | Stop debugging |
-| `Ctrl+Shift+P` | Command palette |
-| `Ctrl+/` | Toggle comment |
-| `Alt+Shift+F` | Format document |
+| `Ctrl+.` | Gyors javítások |
+| `F5` | Debug indítása |
+| `Shift+F5` | Debug leállítása |
+| `Ctrl+Shift+P` | Parancs paletta |
+| `Ctrl+/` | Komment kapcsoló |
+| `Alt+Shift+F` | Dokumentum formázása |
 
 ### Android Studio
 
-| Shortcut | Action |
+| Parancsikon | Művelet |
 |----------|--------|
 | `Ctrl+Space` | Auto-complete |
-| `Alt+Enter` | Quick fixes |
-| `Shift+F10` | Run |
+| `Alt+Enter` | Gyors javítások |
+| `Shift+F10` | Futtatás |
 | `Shift+F9` | Debug |
-| `Ctrl+Alt+L` | Format code |
-| `Ctrl+/` | Comment line |
+| `Ctrl+Alt+L` | Kód formázása |
+| `Ctrl+/` | Sor kommentelése |
 
-## Build Variants
+## Build Változatok
 
 ```bash
-# Debug (development)
+# Debug (fejlesztés)
 flutter build apk --debug
 
-# Profile (testing performance)
+# Profile (teljesítmény tesztelés)
 flutter build apk --profile
 
-# Release (production)
+# Release (produkció)
 flutter build apk --release
 
-# With custom config
+# Egyedi konfigurációval
 flutter build apk --release --dart-define=API_URL=https://api.prod.com
 ```
 
-## Useful Packages
+## Hasznos Csomagok
 
-| Package | Purpose |
+| Csomag | Cél |
 |---------|---------|
-| get | State management & navigation |
-| get_storage | Local storage |
-| http | HTTP client |
-| lottie | Animations |
-| nfc_manager | NFC functionality |
-| encrypt | Encryption |
-| permission_handler | Runtime permissions |
-| app_settings | Open system settings |
+| get | Állapotkezelés és navigáció |
+| get_storage | Helyi tárolás |
+| http | HTTP kliens |
+| lottie | Animációk |
+| nfc_manager | NFC funkcionalitás |
+| encrypt | Titkosítás |
+| permission_handler | Futásidejű engedélyek |
+| app_settings | Rendszerbeállítások megnyitása |
 
-## Resources
+## Források
 
-### Official Documentation
-- [Flutter Docs](https://docs.flutter.dev/)
+### Hivatalos Dokumentáció
+- [Flutter Dokumentáció](https://docs.flutter.dev/)
 - [Dart API](https://api.dart.dev/)
-- [Android Developers](https://developer.android.com/)
+- [Android Fejlesztők](https://developer.android.com/)
 
-### Packages
-- [pub.dev](https://pub.dev/) - Dart & Flutter packages
-- [GetX](https://pub.dev/packages/get) - State management
+### Csomagok
+- [pub.dev](https://pub.dev/) - Dart & Flutter csomagok
+- [GetX](https://pub.dev/packages/get) - Állapotkezelés
 
-### Tools
+### Eszközök
 - [Flutter DevTools](https://docs.flutter.dev/development/tools/devtools/overview)
 - [Android Studio](https://developer.android.com/studio)
 - [VS Code](https://code.visualstudio.com/)
 
-### Community
-- [Flutter Community](https://flutter.dev/community)
+### Közösség
+- [Flutter Közösség](https://flutter.dev/community)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/flutter)
 - [Reddit r/FlutterDev](https://reddit.com/r/FlutterDev)
 
-## Environment Variables
+## Környezeti Változók
 
 ```bash
 # Flutter
@@ -570,27 +570,27 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export JAVA_HOME=/path/to/jdk
 ```
 
-## Quick Start Checklist
+## Gyors Indítás Ellenőrző Lista
 
-- [ ] Flutter SDK installed
-- [ ] Android Studio configured
-- [ ] Repository cloned
-- [ ] Dependencies installed (`flutter pub get`)
-- [ ] Backend URL configured
-- [ ] Device connected or emulator running
-- [ ] App builds successfully
-- [ ] Tests pass
-- [ ] Documentation read
+- [ ] Flutter SDK telepítve
+- [ ] Android Studio konfigurálva
+- [ ] Repository klónozva
+- [ ] Függőségek telepítve (`flutter pub get`)
+- [ ] Backend URL konfigurálva
+- [ ] Eszköz csatlakoztatva vagy emulátor fut
+- [ ] Alkalmazás sikeresen épül
+- [ ] Tesztek átmennek
+- [ ] Dokumentáció elolvasva
 
-## Need Help?
+## Segítségre van szüksége?
 
-1. Check the [Setup Guide](SETUP.md)
-2. Read [Architecture Documentation](ARCHITECTURE.md)
-3. Search existing issues
-4. Ask in discussions
-5. Create a new issue
+1. Nézze meg a [Telepítési Útmutatót](SETUP.md)
+2. Olvassa el az [Architektúra Dokumentációt](ARCHITECTURE.md)
+3. Keressen a meglévő issue-k között
+4. Kérdezzen a megbeszélésekben
+5. Hozzon létre új issue-t
 
 ---
 
-**Last Updated:** October 2025
-**Version:** 1.0.0
+**Utoljára frissítve:** 2025. Október
+**Verzió:** 1.0.0
